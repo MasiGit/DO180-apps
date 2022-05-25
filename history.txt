@@ -1,0 +1,139 @@
+    1  pwd
+    2  vi github_token.txt
+    3  git config --global credential.helper cache
+    4  cat github_token.txt 
+    5  lab-configure
+    6  git clone https://github.com/MasiGit/DO180-apps
+    7  cd DO180-apps/
+    8  git sttaus
+    9  git status
+   10  git checkout -b l1
+   11  cat ../github_token.txt 
+   12  git push -u origin l1
+   13  git config --global credential.helper cache
+   14  podman search mysql
+   15  sudo vi /etc/containers/registries.conf 
+   16  podman pull registry.redhat.io/rhscl/mysql-57-rhel7
+   17  podman login 
+   18  podman login registry.redhat.io
+   19  podman pull registry.redhat.io/rhscl/mysql-57-rhel7
+   20  podman images
+   21  podman run registry.redhat.io/rhscl/mysql-57-rhel7
+   22  podman ps
+   23  podman search httpd
+   24  podman run -d registry.access.redhat.com/rhscl/httpd-24-rhel7
+   25  podman ps
+   26  podman inspect 671cfd20d752 | less
+   27  sudo mandb
+   28  man podman
+   29  podman version
+   30  podman search mysql
+   31  podman run -d registry.redhat.io/rhscl/mysql-57-rhel7
+   32  podman ps
+   33  podman ps -a
+   34  podman logs adoring_boyd
+   35  podman run -d -e MYSQL_USER=u1 -e MYSQL_PASSWORD=p1 MYSQL_DATABASE=d1 registry.redhat.io/rhscl/mysql-57-rhel7
+   36  podman run -d -e MYSQL_USER=u1 -e MYSQL_PASSWORD=p1 -e MYSQL_DATABASE=d1 registry.redhat.io/rhscl/mysql-57-rhel7
+   37  podman ps
+   38  lab container-create start
+   39  podman login registry.redhat.io
+   40  podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 d registry.redhat.io/rhel8/mysql-80:1
+   41  podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 -d registry.redhat.io/rhel8/mysql-80:1
+   42  podman exec -it mysql-basic bash
+   43  lab container-create finish
+   44* 
+   45  podman images
+   46  podmn ps
+   47  podman ps
+   48* podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 
+   49  podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 -d registry.redhat.io/rhel8/mysql-80:1
+   50  podman ps
+   51  podman exec -it mysql-basic bash
+   52  
+   53  podman ps
+   54  lab manage-networking start
+   55  podman run --name mysqldb-port > -d -v /home/student/local/mysql:/var/lib/mysql/data -p 13306:3306 > -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 > -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 > registry.redhat.io/rhel8/mysql-80:1
+   56  podman run --name mysqldb-port  -d -v /home/student/local/mysql:/var/lib/mysql/data -p 13306:3306  -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55  -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55  registry.redhat.io/rhel8/mysql-80:1
+   57  podman ps
+   58  mysql -uuser1 -h 127.0.0.1 -pmypa55  -P13306 items < /home/student/DO180/labs/manage-networking/db.sql
+   59  lab manage-networking finish 
+   60  lab image-operations start
+   61  podman login quay.io
+   62  podman run -d --name official-httpd -p 8180:80 quay.io/redhattraining/httpd-parent
+   63  podman exec -it official-httpd /bin/bash
+   64  curl 127.0.0.1:8180/do180.html
+   65  podman diff official-httpd
+   66  podman stop official-httpd
+   67  podman commit -a 'Masi' official-httpd do180-custom-httpd
+   68  podman images
+   69  echo $RHT_OCP4_QUAY_USER
+   70  lab image-operations finish 
+   71  ls
+   72  cd ..
+   73  ls
+   74  lab dockerfile-create start
+   75  ls
+   76  vim /home/student/DO180/labs/dockerfile-create/Containerfile
+   77  cd /home/student/DO180/labs/dockerfile-create
+   78  podman build --layers=false  -t do180/apache .
+   79  podman images
+   80  podman run --name lab-apache -d -p 10080:80 do180/apache
+   81  podman ps
+   82  curl 127.0.0.1:10080
+   83  lab dockerfile-create finish
+   84  clear
+   85  which oc
+   86  cat /usr/local/etc/ocp4.config 
+   87  oc login -u developer -p developer https://api.ocp4.example.com:6443
+   88  oc whami
+   89  oc whoami
+   90  oc whoami man
+   91  ls
+   92  pwd
+   93  cd ..
+   94  oc whoami --show-console
+   95  oc templates
+   96  oc template
+   97  oc get template
+   98  oc get templates
+   99  oc status
+  100  oc get all
+  101  df -h
+  102  lab openshift-resources start
+  103  source /usr/local/etc/ocp4.config 
+  104  echo $RHT_OCP4_DEV_USER
+  105  oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+  106  oc new-project ${RHT_OCP4_DEV_USER}-mysql-openshift
+  107  oc new-app --template=mysql-persistent -p MYSQL_USER=user1 -p MYSQL_PASSWORD=mypa55 -p MYSQL_DATABASE=testdb -p MYSQL_ROOT_PASSWORD=r00tpa55 -p VOLUME_CAPACITY=10Gi
+  108  oc status
+  109  oc get pods
+  110  oc describe pod mysql-1-7kkcb
+  111  oc get svc
+  112  oc describe service mysql
+  113  oc get pvc
+  114  oc describe pvc/mysql
+  115  oc port-forward mysql-1-7kkcb 3306:3306
+  116  oc get pod
+  117  oc status
+  118  oc describe dc/mysql
+  119  oc logs mysql-1-deploy
+  120  oc delete all -l template=mysql-persistent
+  121  oc status
+  122  oc describe svc/mysql
+  123  oc delete all -l template=mysql-persistent-template
+  124  oc delete secret/mysql
+  125  oc get pvc
+  126  oc delete pvc/mysql
+  127  oc new-app --template=mysql-persistent -p MYSQL_USER=user1 -p MYSQL_PASSWORD=mypa55 -p MYSQL_DATABASE=testdb -p MYSQL_ROOT_PASSWORD=r00tpa55 -p VOLUME_CAPACITY=10Gi
+  128  oc get pod -o wide -
+  129  oc get pod -o wide -w
+  130  oc get pod
+  131  oc port-forward mysql-1-f2c22 3306:3306
+  132  ls
+  133  cd DO180
+  134  ls
+  135  git status
+  136  cd ..
+  137  cd DO180-apps/
+  138  git status
+  139  history > history.txt
