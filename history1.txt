@@ -1,0 +1,469 @@
+    1  pwd
+    2  vi github_token.txt
+    3  git config --global credential.helper cache
+    4  cat github_token.txt 
+    5  lab-configure
+    6  git clone https://github.com/MasiGit/DO180-apps
+    7  cd DO180-apps/
+    8  git sttaus
+    9  git status
+   10  git checkout -b l1
+   11  cat ../github_token.txt 
+   12  git push -u origin l1
+   13  git config --global credential.helper cache
+   14  podman search mysql
+   15  sudo vi /etc/containers/registries.conf 
+   16  podman pull registry.redhat.io/rhscl/mysql-57-rhel7
+   17  podman login 
+   18  podman login registry.redhat.io
+   19  podman pull registry.redhat.io/rhscl/mysql-57-rhel7
+   20  podman images
+   21  podman run registry.redhat.io/rhscl/mysql-57-rhel7
+   22  podman ps
+   23  podman search httpd
+   24  podman run -d registry.access.redhat.com/rhscl/httpd-24-rhel7
+   25  podman ps
+   26  podman inspect 671cfd20d752 | less
+   27  sudo mandb
+   28  man podman
+   29  podman version
+   30  podman search mysql
+   31  podman run -d registry.redhat.io/rhscl/mysql-57-rhel7
+   32  podman ps
+   33  podman ps -a
+   34  podman logs adoring_boyd
+   35  podman run -d -e MYSQL_USER=u1 -e MYSQL_PASSWORD=p1 MYSQL_DATABASE=d1 registry.redhat.io/rhscl/mysql-57-rhel7
+   36  podman run -d -e MYSQL_USER=u1 -e MYSQL_PASSWORD=p1 -e MYSQL_DATABASE=d1 registry.redhat.io/rhscl/mysql-57-rhel7
+   37  podman ps
+   38  lab container-create start
+   39  podman login registry.redhat.io
+   40  podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 d registry.redhat.io/rhel8/mysql-80:1
+   41  podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 -d registry.redhat.io/rhel8/mysql-80:1
+   42  podman exec -it mysql-basic bash
+   43  lab container-create finish
+   44* 
+   45  podman images
+   46  podmn ps
+   47  podman ps
+   48* podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 
+   49  podman run --name mysql-basic -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 -d registry.redhat.io/rhel8/mysql-80:1
+   50  podman ps
+   51  podman exec -it mysql-basic bash
+   52  
+   53  podman ps
+   54  lab manage-networking start
+   55  podman run --name mysqldb-port > -d -v /home/student/local/mysql:/var/lib/mysql/data -p 13306:3306 > -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55 > -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55 > registry.redhat.io/rhel8/mysql-80:1
+   56  podman run --name mysqldb-port  -d -v /home/student/local/mysql:/var/lib/mysql/data -p 13306:3306  -e MYSQL_USER=user1 -e MYSQL_PASSWORD=mypa55  -e MYSQL_DATABASE=items -e MYSQL_ROOT_PASSWORD=r00tpa55  registry.redhat.io/rhel8/mysql-80:1
+   57  podman ps
+   58  mysql -uuser1 -h 127.0.0.1 -pmypa55  -P13306 items < /home/student/DO180/labs/manage-networking/db.sql
+   59  lab manage-networking finish 
+   60  lab image-operations start
+   61  podman login quay.io
+   62  podman run -d --name official-httpd -p 8180:80 quay.io/redhattraining/httpd-parent
+   63  podman exec -it official-httpd /bin/bash
+   64  curl 127.0.0.1:8180/do180.html
+   65  podman diff official-httpd
+   66  podman stop official-httpd
+   67  podman commit -a 'Masi' official-httpd do180-custom-httpd
+   68  podman images
+   69  echo $RHT_OCP4_QUAY_USER
+   70  lab image-operations finish 
+   71  ls
+   72  cd ..
+   73  ls
+   74  lab dockerfile-create start
+   75  ls
+   76  vim /home/student/DO180/labs/dockerfile-create/Containerfile
+   77  cd /home/student/DO180/labs/dockerfile-create
+   78  podman build --layers=false  -t do180/apache .
+   79  podman images
+   80  podman run --name lab-apache -d -p 10080:80 do180/apache
+   81  podman ps
+   82  curl 127.0.0.1:10080
+   83  lab dockerfile-create finish
+   84  clear
+   85  which oc
+   86  cat /usr/local/etc/ocp4.config 
+   87  oc login -u developer -p developer https://api.ocp4.example.com:6443
+   88  oc whami
+   89  oc whoami
+   90  oc whoami man
+   91  ls
+   92  pwd
+   93  cd ..
+   94  oc whoami --show-console
+   95  oc templates
+   96  oc template
+   97  oc get template
+   98  oc get templates
+   99  oc status
+  100  oc get all
+  101  df -h
+  102  lab openshift-resources start
+  103  source /usr/local/etc/ocp4.config 
+  104  echo $RHT_OCP4_DEV_USER
+  105  oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+  106  oc new-project ${RHT_OCP4_DEV_USER}-mysql-openshift
+  107  oc new-app --template=mysql-persistent -p MYSQL_USER=user1 -p MYSQL_PASSWORD=mypa55 -p MYSQL_DATABASE=testdb -p MYSQL_ROOT_PASSWORD=r00tpa55 -p VOLUME_CAPACITY=10Gi
+  108  oc status
+  109  oc get pods
+  110  oc describe pod mysql-1-7kkcb
+  111  oc get svc
+  112  oc describe service mysql
+  113  oc get pvc
+  114  oc describe pvc/mysql
+  115  oc port-forward mysql-1-7kkcb 3306:3306
+  116  oc get pod
+  117  oc status
+  118  oc describe dc/mysql
+  119  oc logs mysql-1-deploy
+  120  oc delete all -l template=mysql-persistent
+  121  oc status
+  122  oc describe svc/mysql
+  123  oc delete all -l template=mysql-persistent-template
+  124  oc delete secret/mysql
+  125  oc get pvc
+  126  oc delete pvc/mysql
+  127  oc new-app --template=mysql-persistent -p MYSQL_USER=user1 -p MYSQL_PASSWORD=mypa55 -p MYSQL_DATABASE=testdb -p MYSQL_ROOT_PASSWORD=r00tpa55 -p VOLUME_CAPACITY=10Gi
+  128  oc get pod -o wide -
+  129  oc get pod -o wide -w
+  130  oc get pod
+  131  oc port-forward mysql-1-f2c22 3306:3306
+  132  ls
+  133  cd DO180
+  134  ls
+  135  git status
+  136  cd ..
+  137  cd DO180-apps/
+  138  git status
+  139  history > history.txt
+  140  git add .
+  141  git commit -m "History"
+  142  git push origin l1
+  143  ls
+  144  cd ..
+  145  ls
+  146  cat github_token.txt 
+  147  cd ..
+  148  cd student/DO180-apps/
+  149  git push origin l1
+  150  cd ..
+  151  ls
+  152  oc status
+  153  oc delete project ${RHT_OCP4_DEV_USER}-mysql-openshift
+  154  lab openshift-resources finish 
+  155* 
+  156  source /usr/local/etc/ocp4.config
+  157  oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+  158  oc new-project ${RHT_OCP4_DEV_USER}-route
+  159  oc new-app --image-stream php:7.3~https://github.com/${RHT_OCP4_GITHUB_USER/DO180-apps --context-dir php-helloworld --name php-helloworld
+  160  oc new-app --image-stream php:7.3~https://github.com/${RHT_OCP4_GITHUB_USER}/DO180-apps --context-dir php-helloworld --name php-helloworld
+  161  oc status
+  162  oc get pods -w
+  163  oc get pods
+  164  oc logs -f bc/php-helloworld
+  165  oc describe svc/php-helloworld
+  166  oc expose svc/php-helloworld
+  167  oc describe route
+  168  curl php-helloworld-developer-route.apps.ocp4.example.com
+  169  oc expose svc/php-helloworld --name customphp.apps.ocp4.example.com
+  170  oc describe route
+  171  curl 
+  172  curl customphp.apps.ocp4.example.com
+  173  oc get route
+  174  curl customphp-apps-ocp4-example-com-developer-route.apps.ocp4.example.com
+  175  oc expose svc/php-helloworld --hostname  customphp.apps.ocp4.example.com --name newroute
+  176  oc get route
+  177  curl customphp.apps.ocp4.example.com
+  178  oc get route
+  179  lab openshift-routes finish
+  180  ls
+  181  cd DO180-apps/
+  182  vi fullop.txt
+  183  git add .
+  184  git commit -m "FullOP"
+  185  cd ..
+  186  cat github_token.txt 
+  187  cd DO180-apps/
+  188  git push origin l1
+  189  lab openshift-s2i start
+  190  git checkout master
+  191  git checkout -b s2i
+  192  git push -u origin s2i
+  193  ls
+  194  oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+  195  oc new-project ${RHT_OCP4_DEV_USER}-s2i
+  196  oc new-app php:7.3 --name=php-helloworld https://github.com/${RHT_OCP4_GITHUB_USER}/DO180-apps#s2i --context-dir php-helloworld
+  197  oc get pods -w
+  198  oc logs --all-containers -f php-helloworld-1-build
+  199  oc describe deployment/php-helloworld
+  200  oc expose service php-helloworld --name ${RHT_OCP4_DEV_USER}-helloworld
+  201  oc get route
+  202  curl -s developer-helloworld-developer-s2i.apps.ocp4.example.com
+  203  cd php-helloworld/
+  204  vi index.php 
+  205  git add .
+  206  git commit -m 'CHnaged index page contents'
+  207  git push origin s2i
+  208  oc start-build php-helloworld 
+  209  oc logs php-helloworld-2-build -f
+  210  oc get pods
+  211  curl -s developer-helloworld-developer-s2i.apps.ocp4.example.com
+  212  lab openshift-s2i finish
+  213  git branch
+  214  git checkout l1
+  215  git commit -m "FullOp2"
+  216  git add .
+  217  git commit -m "FullOp2"
+  218  cd ..
+  219  git add .
+  220  git commit -m "FullOp2"
+  221  git push origin l1
+  222  ls
+  223  lab multicontainer-application start
+  224  oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+  225  oc new-project ${RHT_OCP4_DEV_USER}-application
+  226  vi /home/student/DO180/labs/multicontainer-application/todo-app.yml 
+  227  cd ..
+  228  oc create -f /home/student/DO180/labs/multicontainer-application/todo-app.yml
+  229  oc get pods -w
+  230  oc port-forward mysql 3306:3306
+  231  oc expose service todoapi
+  232  oc status | grep -o "http:.*.com"
+  233  curl -w http://todoapi-developer-application.apps.ocp4.example.com 
+  234  curl http://todoapi-developer-application.apps.ocp4.example.com
+  235  curl http://todoapi-developer-application.apps.ocp4.example.com/todo/api/items/1
+  236  lab multicontainer-application finish 
+  237  ls
+  238  git status
+  239  ls
+  240  cd DO180-apps/
+  241  git status
+  242  git add .
+  243  git commit -m "Custom files"
+  244  git push origin l1
+  245  lab install-troubleshoot start
+  246  source /usr/local/etc/ocp4.config 
+  247  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+  248  oc get nodes
+  249  oc adm top node
+  250  oc describe node master01
+  251  oc get pod -n openshift-image-registry 
+  252  oc logs --tail 3 openshift-image-registry
+  253  oc logs --tail 3 openshift-image-registry cluster-image-registry-operator-64687b967c-94xlj
+  254  oc logs --tail 3 -n openshift-image-registry cluster-image-registry-operator-64687b967c-94xlj
+  255  oc adm node-logs --tail 1 -u kubelet master01
+  256  oc debug node/master01
+  257  oc project install-troubleshoot
+  258  oc get pod
+  259  oc status
+  260  oc get events
+  261  lab install-troubleshoot finish
+  262  lab install-storage start
+  263  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+  264  oc sc
+  265  oc get sc
+  266  oc new-app --name postgresql-persistent --docker-image registry.redhat.io/rhel8/postgresql-13:1-7 -e POSTGRESQL_USER=redhat -e POSTGRESQL_PASSWORD=redhat123 -e POSTGRESQL_DATABASE=persistentdb
+  267  oc het pods
+  268  oc het podsoc get pods
+  269  oc get pods
+  270  oc set volumes deployment/postgresql-persistent --add --name postgresql-storage --type pvc --claim-class nfs-storage --claim-mode rwo --claim-size 10Gi --mount-path /var/lib/pgsql --claim-name postgresql-storage
+  271  oc get pvc
+  272  oc get pv -o custom-columns=NAME:.metdata.name,CLAIM:.spec.claimRef.name
+  273  cd ~/DO280/labs/install-storage/
+  274  ./init_data.sh 
+  275  ./check_data.sh 
+  276  oc delete all -l app=postgresql-persistent
+  277  oc new-app --name postgresql-persistent2 --docker-image registry.redhat.io/rhel8/postgresql-13:1-7 -e POSTGRESQL_USER=redhat -e POSTGRESQL_PASSWORD=redhat123 -e POSTGRESQL_DATABASE=persistentdb
+  278* 
+  279  oc set volumes deployment/postgresql-persistent2 --add --name postgresql-storage --type pvc --claim-class nfs-storage --claim-mode rwo --claim-size 10Gi --mount-path /var/lib/pgsql --claim-name postgresql-storage
+  280  oc set volumes deployment/postgresql-persistent2 --add --name postgresql-storage --type pvc --mount-path /var/lib/pgsql --claim-name postgresql-storage
+  281  ./check_data.sh 
+  282  oc delete all -l app=postgresql-persistent2
+  283  oc delete pvc/postgresql-storage
+  284  cd ~
+  285  lab install-storage finish
+  286  lab auth-provider start
+  287  htpasswd -c -B -b ~/DO280/labs/auth-provider/htpasswd admin redhat
+  288  htpasswd -c -B -b ~/DO280/labs/auth-provider/htpasswd developer developer
+  289  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+  290  oc create secret generic localusers --from-file htpasswd=/home/student/DO280/labs/auth-provider/htpasswd -n openshift-config
+  291  oc adm policy add-cluster-role-to-user cluster-admin admin
+  292  oc get oauth cluster -o yaml > ~/DO280/labs/auth-provider/oauth.yaml 
+  293  vim ~/DO280/labs/auth-provider/oauth.yaml 
+  294  oc replace -f ~/DO280/labs/auth-provider/oauth.yaml 
+  295  oc login -u admin -p redhat
+  296  oc get pods
+  297  oc login -u admin -p redhat
+  298  oc whoami
+  299  oc get oauth/cluster -o yaml
+  300  oc get secret -n openshift-config
+  301  oc extract secret localusers --help
+  302  oc extract secret localusers --to . -n openshift-config
+  303  oc extract secret/localusers --to . -n openshift-config
+  304  ls
+  305  cat htpasswd
+  306  oc login -u developer -p developer
+  307  htpasswd  -B -b  admin redhat
+  308  htpasswd  -B -b htpasswd  admin redhat
+  309  oc set --help
+  310  oc set data --help
+  311  oc set data secret/localusers -n openshift-config --from-file=htpasswd
+  312  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+  313  oc set data secret/localusers -n openshift-config --from-file=htpasswd
+  314  oc get pod -n openshift-authentication
+  315  oc login -u admin -p redhat
+  316  oc get nodes
+  317  oc get users
+  318  oc get identity
+  319  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+  320  oc delete project auth-provider
+  321  oc delete secret localusers -n openshift-config
+  322  oc delete user --all
+  323  oc delete identity --all
+  324  lab auth-provider finish
+  325  lab auth-rbac start 
+  326  oc login -u admin -p redhat https://api.ocp4.example.com:6443
+  327  ls
+  328  rm -rf htpasswd 
+  329  lab auth-rbac finish
+  330  lab auth-rbac start 
+  331  oc login -u admin -p redhat https://api.ocp4.example.com:6443
+  332  oc get clusterrolebinding -o wide | grep -E 'NAME|self-provisioners'
+  333  oc describe clusterrolebindings self-provisioners 
+  334  oc adm policy remove-cluster-role-from-group self-provisioner systm:authenticated:oauth
+  335  oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+  336  oc describe clusterrolebindings self-provisioners
+  337  oc login -u leader -p redhat
+  338  oc new-project test
+  339  oc login -u admin -p redhat
+  340  oc new-project auth-rbac
+  341  oc policy add-role-to-user admin leader
+  342  oc adm groups new dev-group
+  343  oc adm groups add-users dev-group developer
+  344  oc adm groups new qa-group
+  345  oc adm groups add-users qa-group qa-engineer
+  346  oc get groups
+  347  oc get users -n qa-engineer
+  348  oc login -u leader -p redhat
+  349  oc policy add-role-to-group edit dev-group
+  350  oc policy add-role-to-group view qa-grou[
+  351  oc policy add-role-to-group view qa-group
+  352  oc get rolebindings -o wide
+  353  oc policy remove-role-to-group view qa-grou[
+  354  oc policy -h
+  355  oc policy remove-role-from-group view qa-grou[
+  356  oc get rolebindings -o wide
+  357  oc login -u developer -p developer
+  358  oc new-app --name httpd httpd:2.4
+  359  oc policy add-role-to-user edit qa-engineer
+  360  oc login -u qa-engineer -p redhat
+  361  oc scale deployment httpd --replicas 3
+  362  oc login -u admin -p redhat
+  363  oc adm policy add-cluster-role-to-group --rolebinding-name self-provisoners self-provisioner system:authenticated:oauth
+  364  lab auth-rbac finish
+  365  lab authorization-secrets start
+  366  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  367  oc new-project authorization-secrets
+  368  oc create secret generic
+  369  oc create secret generic mysql --from-literal user=myuser --from-literal password=redhat123 --from-literal database=test_secrets --from-literal hostname=mysql
+  370  oc new-app --name mysql --docker-image registry.redhat.io/rhel8/mysql-80:1
+  371  oc get pods -w
+  372  oc set env deployment/mysql --from secret/mysql --prefix MYSQL_
+  373  oc set volume deployment/mysql --add --type secret --mount-path /run/secrets/mysql --secret-name mysql
+  374  oc get pods
+  375  oc rsh mysql-5d987d5694-dg7b5
+  376  oc new-app --name quotes --docker-image quay.io/redhattraining/famous-quotes:2.1
+  377  oc get pods -l deployment=quotes -w
+  378  oc set env deployment/quotes --from secret/mysql --prefix QUOTES_
+  379  oc get pods -l deployment=quotes -w
+  380  oc delete project authorization-secrets 
+  381  lab authorization-secrets finish
+  382  lab authorization-scc start
+  383  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  384  oc new-project authorization-scc
+  385  oc new-app --name gitlab --docker-image quay.io/redhattraining/gitlab-ce:8.4.3-ce.0
+  386  oc get pods
+  387  oc logs gitlab-6c69b7776-ht8r7
+  388  oc login -u admin -p redhat
+  389  oc get pod/gitlab-6c69b7776-ht8r7 -o yaml | oc adm policy scc-subject-review -f -
+  390  oc create sa gitlab-sa
+  391  oc adm policy add-scc-to-user anyuid -z gitlab-sa
+  392  oc login -u developer -p developer
+  393  oc set serviceaccount deployment/gitlab gitlab-sa
+  394  oc get pods
+  395  lab authorization-scc finish
+  396  lab network-sdn start
+  397  oc login -u developer -p developer
+  398  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  399  oc new-project network-sdn
+  400  cd ~/DO280/labs/network-sdn/
+  401  ls
+  402  oc create -f todo-db.yaml 
+  403  oc status
+  404  oc get pods
+  405  oc cp db-data.sql mysql-5f9bdc6875-2xdp5:/tmp/
+  406  oc rsh mysql-5f9bdc6875-2xdp5 bash
+  407  oc create -f todo-frontend.yaml 
+  408  oc get pods
+  409  oc expose service frontend --hostname todo.apps.ocp4.example.com
+  410  oc get routes
+  411  oc logs frontend-5cbdf5bf85-crf4f
+  412  oc get service/mysql -o jsonpath="{.spec.cluserIP}{'\n'}
+  413  oc get service/mysql -o jsonpath="{.spec.cluserIP}{'\n'}"
+  414  oc get service/mysql -o jsonpath="{.spec.clusterIP}{'\n'}"
+  415  oc debug -t deployment/frontend
+  416  oc get service/frontend -o jsonpath = "{.spec.clusterIP}{'\n'}"
+  417  oc get service/frontend -o jsonpath="{.spec.clusterIP}{'\n'}"
+  418  oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+  419  oc get pods -o wide -l name=frontend
+  420  oc debug -t deployment/mysql --image registry.access.redat.com/ubi8/ubi:8.4
+  421  oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+  422  oc get svc
+  423  oc describe svc/frontend
+  424  oc describe deployment/frontend | grep Labels -A1
+  425  oc edit svc/frontend
+  426  oc describe svc/frontend
+  427  cd ~
+  428  oc delete project network-sdn
+  429  lab network-sdn finish
+  430  lab network-ingress start
+  431  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  432  oc new-project network-ingress
+  433  oc create -f ~/DO280/labs/network-ingress/todo-app-v1.yaml 
+  434  oc statuis
+  435  oc status
+  436  oc expose svc todo-http --hostname todo-http.appsocp4.example.com
+  437  oc get routes
+  438  oc expose svc todo-http --hostname todo-http.apps.ocp4.example.com --name new1
+  439  oc get routes
+  440  cd ~/DO280/labs/network-ingress/
+  441  oc create route edge todo-https --service todo-http --hostname todo-https.apps.ocp4.example.com
+  442  curl -I -v https://todo-https.apps.ocp4.example.com
+  443  oc get svc todo-http -o jsonpath="{.spec.cluserIP}{'\n'}"
+  444  oc get svc todo-http -o jsonpath="{.spec.clusterIP}{'\n'}"
+  445  oc debug -t deployment/todo-http --image registry.access.redhat.com/ubi8/ubi:8.4
+  446  oc delete route todo-https
+  447  cd certs/
+  448  ls -l
+  449  openssl genrsa -out training.key 2048
+  450  openssl req -new -subj "/C=US/ST=North Carolina/L-Raliegh/O=Red Hat/\CN=todo-https.apps.ocp4.example.com" -key training.key -out training.csr
+  451  openssl req -new -subj "/C=US/ST=North Carolina/L=Raliegh/O=Red Hat/\CN=todo-https.apps.ocp4.example.com" -key training.key -out training.csr
+  452  openssl req -new -subj "/C=US/ST=North Carolina/L=Raliegh/O=Red Hat/CN=todo-https.apps.ocp4.example.com" -key training.key -out training.csr
+  453  openssl x509 -req -in training.csr -passin file:passphrase.txt -CA training-CA.pem -CAkey training-CA.key -CAcreateserial -out training.crt -days 1825 -sha256 -extfile training.ext 
+  454  ls -lrt
+  455  cd ..
+  456  oc create secret tls todo-certs --cert certs/training.crt --key certs/training.key
+  457  oc create -f todo-app-v2.yaml 
+  458  oc get pods
+  459  oc describe pod todo-https-7d59b58dcf-jbfql | grep Mounts -A2
+  460  oc create route passthrough todo-https --service todo-https --port 8443 --hostname todo-https.apps.ocp4.example.com
+  461  curl -vvI --cacert certs/training-CA.pem https://todo-https.apps.ocp4.example.com
+  462  oc get svc todo-https -o jsonpath="{.spec.clusterIP}{'\n'}"
+  463  oc debug -t deployment/todo-https --image registry.access.redhat.com/ubi8/ubi:8.4
+  464  cd ~
+  465  oc delete project network-ingress 
+  466  lab network-ingress finish
+  467  cd DO180-apps/
+  468  ls
+  469  history > history1.txt

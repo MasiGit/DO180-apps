@@ -1,0 +1,3691 @@
+REPOSITORY                                        TAG      IMAGE ID       CREATED          SIZE
+localhost/do180/apache                            latest   fe52f8ddad4a   23 seconds ago   234 MB
+registry.access.redhat.com/rhscl/httpd-24-rhel7   latest   ef75f9ef1b99   11 days ago      330 MB
+registry.access.redhat.com/ubi8/ubi               8.3      613e5da7a934   13 months ago    213 MB
+registry.redhat.io/rhscl/mysql-57-rhel7           latest   60726b33a00a   2 years ago      448 MB
+[student@workstation dockerfile-create]$ podman run --name lab-apache -d -p 10080:80 do180/apache
+dee5b3e117d0a491c38ba224ce0a646391945f9cfe2e4ff153f1a29203e84448
+[student@workstation dockerfile-create]$ podman ps
+CONTAINER ID  IMAGE                                                   COMMAND               CREATED        STATUS            PORTS                  NAMES
+dee5b3e117d0  localhost/do180/apache:latest                           httpd -D FOREGROU...  8 seconds ago  Up 7 seconds ago  0.0.0.0:10080->80/tcp  lab-apache
+17c7d7dfcec8  registry.redhat.io/rhscl/mysql-57-rhel7:latest          run-mysqld            42 hours ago   Up 42 hours ago                          thirsty_wing
+671cfd20d752  registry.access.redhat.com/rhscl/httpd-24-rhel7:latest  /usr/bin/run-http...  42 hours ago   Up 42 hours ago                          inspiring_sanderson
+[student@workstation dockerfile-create]$ curl 127.0.0.1:10080
+Hello from Containerfile
+[student@workstation dockerfile-create]$ lab dockerfile-create finish
+
+Completing the Guided Exercise: Building a basic Apache Container Image
+
+ · Stopping lab-apache container that is running...............  SUCCESS
+ · Removing lab-apache container that is in the cache..........  SUCCESS
+ · Removing do180/apache custom container image................  SUCCESS
+ · Removing UBI8 container image...............................  SUCCESS
+[student@workstation dockerfile-create]$ clear
+
+[student@workstation dockerfile-create]$ which oc
+/usr/bin/oc
+[student@workstation dockerfile-create]$ oc login -u developer -p developer ^C
+[student@workstation dockerfile-create]$ cat /usr/local/etc/ocp4.config 
+RHT_OCP4_MASTER_API=https://api.ocp4.example.com:6443
+RHT_OCP4_WILDCARD_DOMAIN=apps.ocp4.example.com
+RHT_OCP4_NEXUS_SERVER=nexus-common.apps.ocp4.example.com
+RHT_OCP4_DEV_USER=developer
+RHT_OCP4_DEV_PASSWORD=developer
+RHT_OCP4_GITHUB_USER=MasiGit
+RHT_OCP4_QUAY_USER=masiy2k
+RHT_OCP4_USER_PASSWD=redhat
+[student@workstation dockerfile-create]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation dockerfile-create]$ oc whami
+Error: unknown command "whami" for "oc"
+
+Did you mean this?
+	whoami
+
+Run 'oc --help' for usage.
+[student@workstation dockerfile-create]$ oc whoami
+developer
+[student@workstation dockerfile-create]$ oc whoami man
+developer
+[student@workstation dockerfile-create]$ oc whoami 
+Containerfile  .placeholder   
+[student@workstation dockerfile-create]$ oc whoami 
+Containerfile  .placeholder   
+[student@workstation dockerfile-create]$ oc whoami 
+Containerfile  .placeholder   
+[student@workstation dockerfile-create]$ ls
+Containerfile
+[student@workstation dockerfile-create]$ pwd
+/home/student/DO180/labs/dockerfile-create
+[student@workstation dockerfile-create]$ cd ..
+[student@workstation labs]$ cd ..
+[student@workstation DO180]$ cd ..
+[student@workstation ~]$ oc whoami --show-console
+https://console-openshift-console.apps.ocp4.example.com
+[student@workstation ~]$ oc templates
+Error: unknown command "templates" for "oc"
+Run 'oc --help' for usage.
+[student@workstation ~]$ oc template
+Error: unknown command "template" for "oc"
+Run 'oc --help' for usage.
+[student@workstation ~]$ oc get template
+Error from server (Forbidden): templates.template.openshift.io is forbidden: User "developer" cannot list resource "templates" in API group "template.openshift.io" in the namespace "default"
+[student@workstation ~]$ oc get templates
+Error from server (Forbidden): templates.template.openshift.io is forbidden: User "developer" cannot list resource "templates" in API group "template.openshift.io" in the namespace "default"
+[student@workstation ~]$ oc status
+error: you do not have rights to view project "default" specified in your config or the project doesn't exist
+[student@workstation ~]$ oc get all
+Error from server (Forbidden): pods is forbidden: User "developer" cannot list resource "pods" in API group "" in the namespace "default"
+Error from server (Forbidden): replicationcontrollers is forbidden: User "developer" cannot list resource "replicationcontrollers" in API group "" in the namespace "default"
+Error from server (Forbidden): services is forbidden: User "developer" cannot list resource "services" in API group "" in the namespace "default"
+Error from server (Forbidden): daemonsets.apps is forbidden: User "developer" cannot list resource "daemonsets" in API group "apps" in the namespace "default"
+Error from server (Forbidden): deployments.apps is forbidden: User "developer" cannot list resource "deployments" in API group "apps" in the namespace "default"
+Error from server (Forbidden): replicasets.apps is forbidden: User "developer" cannot list resource "replicasets" in API group "apps" in the namespace "default"
+Error from server (Forbidden): statefulsets.apps is forbidden: User "developer" cannot list resource "statefulsets" in API group "apps" in the namespace "default"
+Error from server (Forbidden): horizontalpodautoscalers.autoscaling is forbidden: User "developer" cannot list resource "horizontalpodautoscalers" in API group "autoscaling" in the namespace "default"
+Error from server (Forbidden): jobs.batch is forbidden: User "developer" cannot list resource "jobs" in API group "batch" in the namespace "default"
+Error from server (Forbidden): cronjobs.batch is forbidden: User "developer" cannot list resource "cronjobs" in API group "batch" in the namespace "default"
+Error from server (Forbidden): deploymentconfigs.apps.openshift.io is forbidden: User "developer" cannot list resource "deploymentconfigs" in API group "apps.openshift.io" in the namespace "default"
+Error from server (Forbidden): buildconfigs.build.openshift.io is forbidden: User "developer" cannot list resource "buildconfigs" in API group "build.openshift.io" in the namespace "default"
+Error from server (Forbidden): builds.build.openshift.io is forbidden: User "developer" cannot list resource "builds" in API group "build.openshift.io" in the namespace "default"
+Error from server (Forbidden): imagestreams.image.openshift.io is forbidden: User "developer" cannot list resource "imagestreams" in API group "image.openshift.io" in the namespace "default"
+Error from server (Forbidden): routes.route.openshift.io is forbidden: User "developer" cannot list resource "routes" in API group "route.openshift.io" in the namespace "default"
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        2.8G     0  2.8G   0% /dev
+tmpfs           2.9G   45M  2.8G   2% /dev/shm
+tmpfs           2.9G   18M  2.9G   1% /run
+tmpfs           2.9G     0  2.9G   0% /sys/fs/cgroup
+/dev/vda3       9.9G  6.8G  3.2G  69% /
+/dev/vda2       100M  6.9M   93M   7% /boot/efi
+tmpfs           580M   16K  580M   1% /run/user/42
+tmpfs           580M  212K  580M   1% /run/user/1000
+[student@workstation ~]$ lab openshift-resources start
+
+Setting up workstation for the Guided Exercise: Deploying a Database Server on OpenShift
+
+ Verifying the OpenShift cluster is running:
+ · Log in on OpenShift.........................................  SUCCESS
+ · Check the internal registry is up and running...............  SUCCESS
+ · Ensuring the 'developer-mysql-openshift' project is absent..  SUCCESS
+[student@workstation ~]$ source /usr/local/etc/ocp4.config 
+[student@workstation ~]$ echo $RHT_OCP4_DEV_USER
+developer
+[student@workstation ~]$ oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project ${RHT_OCP4_DEV_USER}-mysql-openshift
+Now using project "developer-mysql-openshift" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc new-app --template=mysql-persistent -p MYSQL_USER=user1 -p MYSQL_PASSWORD=mypa55 -p MYSQL_DATABASE=testdb -p MYSQL_ROOT_PASSWORD=r00tpa55 -p VOLUME_CAPACITY=10Gi
+--> Deploying template "openshift/mysql-persistent" to project developer-mysql-openshift
+
+     MySQL
+     ---------
+     MySQL database service, with persistent storage. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/8.0/root/usr/share/container-scripts/mysql/README.md.
+     
+     NOTE: Scaling to more than one replica is not supported. You must have persistent volumes available in your cluster to use this template.
+
+     The following service(s) have been created in your project: mysql.
+     
+            Username: user1
+            Password: mypa55
+       Database Name: testdb
+      Connection URL: mysql://mysql:3306/
+     
+     For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/8.0/root/usr/share/container-scripts/mysql/README.md.
+
+     * With parameters:
+        * Memory Limit=512Mi
+        * Namespace=openshift
+        * Database Service Name=mysql
+        * MySQL Connection Username=user1
+        * MySQL Connection Password=mypa55
+        * MySQL root user Password=r00tpa55
+        * MySQL Database Name=testdb
+        * Volume Capacity=10Gi
+        * Version of MySQL Image=8.0-el8
+
+--> Creating resources ...
+    secret "mysql" created
+    service "mysql" created
+    persistentvolumeclaim "mysql" created
+    deploymentconfig.apps.openshift.io "mysql" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/mysql' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc status
+In project developer-mysql-openshift on server https://api.ocp4.example.com:6443
+
+svc/mysql - 172.30.174.199:3306
+  dc/mysql deploys openshift/mysql:8.0-el8 
+    deployment #1 running for 9 seconds - 0/1 pods
+
+View details with 'oc describe <resource>/<name>' or list resources with 'oc get all'.
+[student@workstation ~]$ oc status
+In project developer-mysql-openshift on server https://api.ocp4.example.com:6443
+
+svc/mysql - 172.30.174.199:3306
+  dc/mysql deploys openshift/mysql:8.0-el8 
+    deployment #1 running for 38 seconds - 0/1 pods
+
+View details with 'oc describe <resource>/<name>' or list resources with 'oc get all'.
+[student@workstation ~]$ oc get pods
+NAME             READY   STATUS    RESTARTS   AGE
+mysql-1-7kkcb    0/1     Running   0          52s
+mysql-1-deploy   1/1     Running   0          56s
+[student@workstation ~]$ oc describe pod mysql-1-7kkcb
+Name:         mysql-1-7kkcb
+Namespace:    developer-mysql-openshift
+Priority:     0
+Node:         master03/192.168.50.12
+Start Time:   Wed, 25 May 2022 05:21:52 -0400
+Labels:       deployment=mysql-1
+              deploymentconfig=mysql
+              name=mysql
+Annotations:  k8s.v1.cni.cncf.io/network-status:
+                [{
+                    "name": "",
+                    "interface": "eth0",
+                    "ips": [
+                        "10.10.0.245"
+                    ],
+                    "default": true,
+                    "dns": {}
+                }]
+              k8s.v1.cni.cncf.io/networks-status:
+                [{
+                    "name": "",
+                    "interface": "eth0",
+                    "ips": [
+                        "10.10.0.245"
+                    ],
+                    "default": true,
+                    "dns": {}
+                }]
+              openshift.io/deployment-config.latest-version: 1
+              openshift.io/deployment-config.name: mysql
+              openshift.io/deployment.name: mysql-1
+              openshift.io/generated-by: OpenShiftNewApp
+              openshift.io/scc: restricted
+Status:       Running
+IP:           10.10.0.245
+IPs:
+  IP:           10.10.0.245
+Controlled By:  ReplicationController/mysql-1
+Containers:
+  mysql:
+    Container ID:   cri-o://ce2e0b96d5dbd70803bc55e581fd4523e1bedcb158640e95b277e538c13e863d
+    Image:          image-registry.openshift-image-registry.svc:5000/openshift/mysql@sha256:ae4124a5afb239616b2612ea08be98ae61baa603e880bb180dc50cc647141fbc
+    Image ID:       image-registry.openshift-image-registry.svc:5000/openshift/mysql@sha256:ae4124a5afb239616b2612ea08be98ae61baa603e880bb180dc50cc647141fbc
+    Port:           3306/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Wed, 25 May 2022 05:23:23 -0400
+      Finished:     Wed, 25 May 2022 05:23:25 -0400
+    Ready:          False
+    Restart Count:  2
+    Limits:
+      memory:  512Mi
+    Requests:
+      memory:   512Mi
+    Liveness:   exec [/bin/sh -i -c MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin -u $MYSQL_USER ping] delay=30s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  exec [/bin/sh -i -c MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin -u $MYSQL_USER ping] delay=5s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      MYSQL_USER:           <set to the key 'database-user' in secret 'mysql'>           Optional: false
+      MYSQL_PASSWORD:       <set to the key 'database-password' in secret 'mysql'>       Optional: false
+      MYSQL_ROOT_PASSWORD:  <set to the key 'database-root-password' in secret 'mysql'>  Optional: false
+      MYSQL_DATABASE:       <set to the key 'database-name' in secret 'mysql'>           Optional: false
+    Mounts:
+      /var/lib/mysql/data from mysql-data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-4l92h (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  mysql-data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  mysql
+    ReadOnly:   false
+  default-token-4l92h:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-4l92h
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/memory-pressure:NoSchedule op=Exists
+                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason          Age                From               Message
+  ----     ------          ----               ----               -------
+  Normal   Scheduled       102s               default-scheduler  Successfully assigned developer-mysql-openshift/mysql-1-7kkcb to master03
+  Normal   AddedInterface  99s                multus             Add eth0 [10.10.0.245/23]
+  Warning  Unhealthy       45s (x3 over 65s)  kubelet            Liveness probe failed: sh: cannot set terminal process group (-1): Inappropriate ioctl for device
+sh: no job control in this shell
+mysqladmin: connect to server at 'localhost' failed
+error: 'Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)'
+Check that mysqld is running and that the socket: '/var/lib/mysql/mysql.sock' exists!
+  Normal   Killing    45s                kubelet  Container mysql failed liveness probe, will be restarted
+  Warning  Unhealthy  15s (x8 over 85s)  kubelet  Readiness probe failed: sh: cannot set terminal process group (-1): Inappropriate ioctl for device
+sh: no job control in this shell
+mysqladmin: connect to server at 'localhost' failed
+error: 'Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)'
+Check that mysqld is running and that the socket: '/var/lib/mysql/mysql.sock' exists!
+  Normal   Pulled   11s (x3 over 98s)  kubelet  Container image "image-registry.openshift-image-registry.svc:5000/openshift/mysql@sha256:ae4124a5afb239616b2612ea08be98ae61baa603e880bb180dc50cc647141fbc" already present on machine
+  Normal   Created  11s (x3 over 98s)  kubelet  Created container mysql
+  Normal   Started  11s (x3 over 98s)  kubelet  Started container mysql
+  Warning  BackOff  5s (x2 over 8s)    kubelet  Back-off restarting failed container
+[student@workstation ~]$ oc get svc
+NAME    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+mysql   ClusterIP   172.30.174.199   <none>        3306/TCP   2m3s
+[student@workstation ~]$ oc describe service mysql
+Name:              mysql
+Namespace:         developer-mysql-openshift
+Labels:            app=mysql-persistent
+                   app.kubernetes.io/component=mysql-persistent
+                   app.kubernetes.io/instance=mysql-persistent
+                   template=mysql-persistent-template
+Annotations:       openshift.io/generated-by: OpenShiftNewApp
+                   template.openshift.io/expose-uri: mysql://{.spec.clusterIP}:{.spec.ports[?(.name=="mysql")].port}
+Selector:          name=mysql
+Type:              ClusterIP
+IP:                172.30.174.199
+Port:              mysql  3306/TCP
+TargetPort:        3306/TCP
+Endpoints:         
+Session Affinity:  None
+Events:            <none>
+[student@workstation ~]$ oc get pvc
+NAME    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+mysql   Bound    pvc-678c3a83-5b2d-40a0-99bb-941735a0595e   10Gi       RWO            nfs-storage    2m39s
+[student@workstation ~]$ oc describe pvc/mysql
+Name:          mysql
+Namespace:     developer-mysql-openshift
+StorageClass:  nfs-storage
+Status:        Bound
+Volume:        pvc-678c3a83-5b2d-40a0-99bb-941735a0595e
+Labels:        app=mysql-persistent
+               app.kubernetes.io/component=mysql-persistent
+               app.kubernetes.io/instance=mysql-persistent
+               template=mysql-persistent-template
+Annotations:   openshift.io/generated-by: OpenShiftNewApp
+               pv.kubernetes.io/bind-completed: yes
+               pv.kubernetes.io/bound-by-controller: yes
+               volume.beta.kubernetes.io/storage-provisioner: nfs-storage-provisioner
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      10Gi
+Access Modes:  RWO
+VolumeMode:    Filesystem
+Mounted By:    mysql-1-7kkcb
+Events:
+  Type    Reason                 Age                  From                                                                                                  Message
+  ----    ------                 ----                 ----                                                                                                  -------
+  Normal  ExternalProvisioning   3m5s (x2 over 3m5s)  persistentvolume-controller                                                                           waiting for a volume to be created, either by external provisioner "nfs-storage-provisioner" or manually created by system administrator
+  Normal  Provisioning           3m4s                 nfs-storage-provisioner_nfs-client-provisioner-699dc7cc94-t55p4_4a7ceb73-da8a-11ec-bbaf-0a580a0a0010  External provisioner is provisioning volume for claim "developer-mysql-openshift/mysql"
+  Normal  ProvisioningSucceeded  3m4s                 nfs-storage-provisioner_nfs-client-provisioner-699dc7cc94-t55p4_4a7ceb73-da8a-11ec-bbaf-0a580a0a0010  Successfully provisioned volume pvc-678c3a83-5b2d-40a0-99bb-941735a0595e
+[student@workstation ~]$ oc port-forward mysql-1-7kkcb 3306:3306
+Forwarding from 127.0.0.1:3306 -> 3306
+Forwarding from [::1]:3306 -> 3306
+Handling connection for 3306
+E0525 05:26:18.665914   69796 portforward.go:400] an error occurred forwarding 3306 -> 3306: error forwarding port 3306 to pod 98fd391c4966257c0fef51cb558cffd0de6fac39fc5feb561b1072a478b3108e, uid : port forward into network namespace "/var/run/netns/93dcbff1-6b10-47d6-8f5b-66c2bebfa561": dialing 3306: dial tcp4 127.0.0.1:3306: connect: connection refused
+Handling connection for 3306
+E0525 05:26:37.412787   69796 portforward.go:400] an error occurred forwarding 3306 -> 3306: error forwarding port 3306 to pod 98fd391c4966257c0fef51cb558cffd0de6fac39fc5feb561b1072a478b3108e, uid : port forward into network namespace "/var/run/netns/93dcbff1-6b10-47d6-8f5b-66c2bebfa561": dialing 3306: dial tcp4 127.0.0.1:3306: connect: connection refused
+E0525 05:27:37.414388   69796 portforward.go:233] lost connection to pod
+[student@workstation ~]$ oc port-forward mysql-1-7kkcb 3306:3306
+Forwarding from 127.0.0.1:3306 -> 3306
+Forwarding from [::1]:3306 -> 3306
+Handling connection for 3306
+E0525 05:28:34.327999   69911 portforward.go:400] an error occurred forwarding 3306 -> 3306: error forwarding port 3306 to pod 98fd391c4966257c0fef51cb558cffd0de6fac39fc5feb561b1072a478b3108e, uid : port forward into network namespace "/var/run/netns/93dcbff1-6b10-47d6-8f5b-66c2bebfa561": dialing 3306: dial tcp4 127.0.0.1:3306: connect: connection refused
+E0525 05:29:34.329159   69911 portforward.go:233] lost connection to pod
+[student@workstation ~]$ oc port-forward mysql-1-7kkcb 3306:3306
+Forwarding from 127.0.0.1:3306 -> 3306
+Forwarding from [::1]:3306 -> 3306
+Handling connection for 3306
+E0525 05:29:47.934767   69944 portforward.go:400] an error occurred forwarding 3306 -> 3306: error forwarding port 3306 to pod 98fd391c4966257c0fef51cb558cffd0de6fac39fc5feb561b1072a478b3108e, uid : port forward into network namespace "/var/run/netns/93dcbff1-6b10-47d6-8f5b-66c2bebfa561": dialing 3306: dial tcp4 127.0.0.1:3306: connect: connection refused
+E0525 05:30:47.937194   69944 portforward.go:233] lost connection to pod
+[student@workstation ~]$ oc port-forward mysql-1-7kkcb 3306:3306
+Error from server (NotFound): pods "mysql-1-7kkcb" not found
+[student@workstation ~]$ oc get pod
+NAME             READY   STATUS   RESTARTS   AGE
+mysql-1-deploy   0/1     Error    0          12m
+[student@workstation ~]$ oc status
+In project developer-mysql-openshift on server https://api.ocp4.example.com:6443
+
+svc/mysql - 172.30.174.199:3306
+  dc/mysql deploys openshift/mysql:8.0-el8 
+    deployment #1 failed 12 minutes ago: config change
+
+View details with 'oc describe <resource>/<name>' or list resources with 'oc get all'.
+[student@workstation ~]$ oc describe dc/mysql
+Name:		mysql
+Namespace:	developer-mysql-openshift
+Created:	13 minutes ago
+Labels:		app=mysql-persistent
+		app.kubernetes.io/component=mysql-persistent
+		app.kubernetes.io/instance=mysql-persistent
+		template=mysql-persistent-template
+Annotations:	openshift.io/generated-by=OpenShiftNewApp
+		template.alpha.openshift.io/wait-for-ready=true
+Latest Version:	1
+Selector:	name=mysql
+Replicas:	1
+Triggers:	Image(mysql@8.0-el8, auto=true), Config
+Strategy:	Recreate
+Template:
+Pod Template:
+  Labels:	name=mysql
+  Annotations:	openshift.io/generated-by: OpenShiftNewApp
+  Containers:
+   mysql:
+    Image:	image-registry.openshift-image-registry.svc:5000/openshift/mysql@sha256:ae4124a5afb239616b2612ea08be98ae61baa603e880bb180dc50cc647141fbc
+    Port:	3306/TCP
+    Host Port:	0/TCP
+    Limits:
+      memory:	512Mi
+    Liveness:	exec [/bin/sh -i -c MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin -u $MYSQL_USER ping] delay=30s timeout=1s period=10s #success=1 #failure=3
+    Readiness:	exec [/bin/sh -i -c MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin -u $MYSQL_USER ping] delay=5s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      MYSQL_USER:		<set to the key 'database-user' in secret 'mysql'>		Optional: false
+      MYSQL_PASSWORD:		<set to the key 'database-password' in secret 'mysql'>		Optional: false
+      MYSQL_ROOT_PASSWORD:	<set to the key 'database-root-password' in secret 'mysql'>	Optional: false
+      MYSQL_DATABASE:		<set to the key 'database-name' in secret 'mysql'>		Optional: false
+    Mounts:
+      /var/lib/mysql/data from mysql-data (rw)
+  Volumes:
+   mysql-data:
+    Type:	PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:	mysql
+    ReadOnly:	false
+
+Deployment #1 (latest):
+	Name:		mysql-1
+	Created:	13 minutes ago
+	Status:		Failed
+	Replicas:	0 current / 0 desired
+	Selector:	deployment=mysql-1,deploymentconfig=mysql,name=mysql
+	Labels:		app.kubernetes.io/component=mysql-persistent,app.kubernetes.io/instance=mysql-persistent,app=mysql-persistent,openshift.io/deployment-config.name=mysql,template=mysql-persistent-template
+	Pods Status:	0 Running / 0 Waiting / 0 Succeeded / 0 Failed
+
+Events:
+  Type		Reason				Age	From				Message
+  ----		------				----	----				-------
+  Normal	DeploymentCreated		13m	deploymentconfig-controller	Created new replication controller "mysql-1" for version 1
+  Normal	ReplicationControllerScaled	3m7s	deploymentconfig-controller	Scaled replication controller "mysql-1" from 1 to 0
+[student@workstation ~]$ oc logs mysql-1-deploy
+--> Scaling mysql-1 to 1
+error: update acceptor rejected mysql-1: pods for rc 'developer-mysql-openshift/mysql-1' took longer than 600 seconds to become available
+[student@workstation ~]$ oc delete all -l template=mysql-persistent
+No resources found
+[student@workstation ~]$ oc status
+In project developer-mysql-openshift on server https://api.ocp4.example.com:6443
+
+svc/mysql - 172.30.174.199:3306
+  dc/mysql deploys openshift/mysql:8.0-el8 
+    deployment #1 failed 14 minutes ago: config change
+
+View details with 'oc describe <resource>/<name>' or list resources with 'oc get all'.
+[student@workstation ~]$ oc describe svc/mysql
+Name:              mysql
+Namespace:         developer-mysql-openshift
+Labels:            app=mysql-persistent
+                   app.kubernetes.io/component=mysql-persistent
+                   app.kubernetes.io/instance=mysql-persistent
+                   template=mysql-persistent-template
+Annotations:       openshift.io/generated-by: OpenShiftNewApp
+                   template.openshift.io/expose-uri: mysql://{.spec.clusterIP}:{.spec.ports[?(.name=="mysql")].port}
+Selector:          name=mysql
+Type:              ClusterIP
+IP:                172.30.174.199
+Port:              mysql  3306/TCP
+TargetPort:        3306/TCP
+Endpoints:         <none>
+Session Affinity:  None
+Events:            <none>
+[student@workstation ~]$ oc delete all -l template=mysql-persistent-template
+replicationcontroller "mysql-1" deleted
+service "mysql" deleted
+deploymentconfig.apps.openshift.io "mysql" deleted
+[student@workstation ~]$ oc delete secret/mysql
+secret "mysql" deleted
+[student@workstation ~]$ oc get pvc
+NAME    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+mysql   Bound    pvc-678c3a83-5b2d-40a0-99bb-941735a0595e   10Gi       RWO            nfs-storage    14m
+[student@workstation ~]$ oc delete pvc/mysql
+persistentvolumeclaim "mysql" deleted
+[student@workstation ~]$ oc new-app --template=mysql-persistent -p MYSQL_USER=user1 -p MYSQL_PASSWORD=mypa55 -p MYSQL_DATABASE=testdb -p MYSQL_ROOT_PASSWORD=r00tpa55 -p VOLUME_CAPACITY=10Gi
+--> Deploying template "openshift/mysql-persistent" to project developer-mysql-openshift
+
+     MySQL
+     ---------
+     MySQL database service, with persistent storage. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/8.0/root/usr/share/container-scripts/mysql/README.md.
+     
+     NOTE: Scaling to more than one replica is not supported. You must have persistent volumes available in your cluster to use this template.
+
+     The following service(s) have been created in your project: mysql.
+     
+            Username: user1
+            Password: mypa55
+       Database Name: testdb
+      Connection URL: mysql://mysql:3306/
+     
+     For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/mysql-container/blob/master/8.0/root/usr/share/container-scripts/mysql/README.md.
+
+     * With parameters:
+        * Memory Limit=512Mi
+        * Namespace=openshift
+        * Database Service Name=mysql
+        * MySQL Connection Username=user1
+        * MySQL Connection Password=mypa55
+        * MySQL root user Password=r00tpa55
+        * MySQL Database Name=testdb
+        * Volume Capacity=10Gi
+        * Version of MySQL Image=8.0-el8
+
+--> Creating resources ...
+    secret "mysql" created
+    service "mysql" created
+    persistentvolumeclaim "mysql" created
+    deploymentconfig.apps.openshift.io "mysql" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/mysql' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc get pod -o wide -
+Error from server (NotFound): pods "-" not found
+[student@workstation ~]$ oc get pod -o wide -w
+NAME             READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+mysql-1-deploy   1/1     Running   0          13s   10.8.0.233    master01   <none>           <none>
+mysql-1-f2c22    0/1     Running   0          10s   10.10.0.251   master03   <none>           <none>
+mysql-1-f2c22    1/1     Running   0          24s   10.10.0.251   master03   <none>           <none>
+mysql-1-deploy   0/1     Completed   0          27s   10.8.0.233    master01   <none>           <none>
+^C[student@workstation ~]$ oc get pod
+NAME             READY   STATUS      RESTARTS   AGE
+mysql-1-deploy   0/1     Completed   0          116s
+mysql-1-f2c22    1/1     Running     0          113s
+[student@workstation ~]$ oc port-forward mysql-1-f2c22 3306:3306
+Forwarding from 127.0.0.1:3306 -> 3306
+Forwarding from [::1]:3306 -> 3306
+Handling connection for 3306
+E0525 05:42:31.056551   70301 portforward.go:233] lost connection to pod
+[student@workstation ~]$ ls
+Desktop  DO180  DO180-apps  Documents  Downloads  github_token.txt  local  Music  Pictures  Public  Templates  venv  Videos
+[student@workstation ~]$ cd DO180
+[student@workstation DO180]$ ls
+labs  solutions
+[student@workstation DO180]$ git status
+fatal: not a git repository (or any of the parent directories): .git
+[student@workstation DO180]$ cd ..
+[student@workstation ~]$ cd D
+Desktop/    DO180/      DO180-apps/ Documents/  Downloads/  
+[student@workstation ~]$ cd DO180-apps/
+[student@workstation DO180-apps]$ git status
+On branch l1
+Your branch is up to date with 'origin/l1'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	-d
+	-e
+
+nothing added to commit but untracked files present (use "git add" to track)
+[student@workstation DO180-apps]$ history > history.txt
+[student@workstation DO180-apps]$ git add .
+[student@workstation DO180-apps]$ git commit -m "History"
+[l1 54faccb] History
+ 3 files changed, 139 insertions(+)
+ create mode 100644 -d
+ create mode 100644 -e
+ create mode 100644 history.txt
+[student@workstation DO180-apps]$ git push origin l1
+Username for 'https://github.com': MasiGit
+Password for 'https://MasiGit@github.com': 
+remote: Support for password authentication was removed on August 13, 2021. Please use a personal access token instead.
+remote: Please see https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information.
+fatal: Authentication failed for 'https://github.com/MasiGit/DO180-apps/'
+[student@workstation DO180-apps]$ ls
+-d  -e  example  history.txt  nodejs-app  nodejs-helloworld  php-helloworld  README.md  temps  todoapp
+[student@workstation DO180-apps]$ cd ..
+[student@workstation ~]$ ls
+Desktop  DO180  DO180-apps  Documents  Downloads  github_token.txt  local  Music  Pictures  Public  Templates  venv  Videos
+[student@workstation ~]$ cat github_token.txt 
+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
+[student@workstation ~]$ cd ..
+[student@workstation home]$ cd student/D
+Desktop/    DO180/      DO180-apps/ Documents/  Downloads/  
+[student@workstation home]$ cd student/D
+Desktop/    DO180/      DO180-apps/ Documents/  Downloads/  
+[student@workstation home]$ cd student/DO180-apps/
+[student@workstation DO180-apps]$ git push origin l1
+Username for 'https://github.com': MasiGit
+Password for 'https://MasiGit@github.com': 
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 1.93 KiB | 1.93 MiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/MasiGit/DO180-apps
+   f7cd896..54faccb  l1 -> l1
+[student@workstation DO180-apps]$ cd ..
+[student@workstation ~]$ ls
+Desktop  DO180  DO180-apps  Documents  Downloads  github_token.txt  local  Music  Pictures  Public  Templates  venv  Videos
+[student@workstation ~]$ oc status
+In project developer-mysql-openshift on server https://api.ocp4.example.com:6443
+
+svc/mysql - 172.30.181.107:3306
+  dc/mysql deploys openshift/mysql:8.0-el8 
+    deployment #1 deployed about an hour ago - 1 pod
+
+View details with 'oc describe <resource>/<name>' or list resources with 'oc get all'.
+[student@workstation ~]$ oc delete project ${RHT_OCP4_DEV_USER}-mysql-openshift
+project.project.openshift.io "developer-mysql-openshift" deleted
+[student@workstation ~]$ lab openshift-resources finish 
+
+Completing the Guided Exercise: Deploying a Database Server on OpenShift
+
+ · Deleting the 'developer-mysql-openshift' project............  SUCCESS
+[student@workstation ~]$ lab openshift-routes start
+
+Setting up workstation for the Guided Exercise: Exposing a Service as a Route
+
+ Verifying the OpenShift cluster is running:
+ · Log in on OpenShift.........................................  SUCCESS
+ · Check the internal registry is up and running...............  SUCCESS
+ · Ensuring the 'developer-route' project does not exist.......  SUCCESS
+[student@workstation ~]$ source /usr/local/etc/ocp4.config
+[student@workstation ~]$ oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project ${RHT_OCP4_DEV_USER}-route
+Now using project "developer-route" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc new-app --image-stream php:7.3~https://github.com/${RHT_OCP4_GITHUB_USER/DO180-apps --context-dir php-helloworld --name php-helloworld
+> ^C
+[student@workstation ~]$ oc new-app --image-stream php:7.3~https://github.com/${RHT_OCP4_GITHUB_USER}/DO180-apps --context-dir php-helloworld --name php-helloworld
+--> Found image fff7ff0 (11 months old) in image stream "openshift/php" under tag "7.3" for "php:7.3"
+
+    Apache 2.4 with PHP 7.3 
+    ----------------------- 
+    PHP 7.3 available as container is a base platform for building and running various PHP 7.3 applications and frameworks. PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers to write dynamically generated web pages. PHP also offers built-in database integration for several commercial and non-commercial database management systems, so writing a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding is probably as a replacement for CGI scripts.
+
+    Tags: builder, php, php73, rh-php73
+
+    * A source build using source code from https://github.com/MasiGit/DO180-apps will be created
+      * The resulting image will be pushed to image stream tag "php-helloworld:latest"
+      * Use 'oc start-build' to trigger a new build
+
+--> Creating resources ...
+    imagestream.image.openshift.io "php-helloworld" created
+    buildconfig.build.openshift.io "php-helloworld" created
+    deployment.apps "php-helloworld" created
+    service "php-helloworld" created
+--> Success
+    Build scheduled, use 'oc logs -f buildconfig/php-helloworld' to track its progress.
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/php-helloworld' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc status
+In project developer-route on server https://api.ocp4.example.com:6443
+
+svc/php-helloworld - 172.30.243.103 ports 8080, 8443
+  deployment/php-helloworld deploys istag/php-helloworld:latest <-
+    bc/php-helloworld source builds https://github.com/MasiGit/DO180-apps on openshift/php:7.3 
+      build #1 pending for 8 seconds
+    deployment #1 running for 8 seconds - 0/1 pods growing to 1
+
+
+1 info identified, use 'oc status --suggest' to see details.
+[student@workstation ~]$ oc get pods -w
+NAME                     READY   STATUS     RESTARTS   AGE
+php-helloworld-1-build   0/1     Init:0/2   0          15s
+php-helloworld-1-build   0/1     Init:1/2   0          15s
+php-helloworld-1-build   0/1     PodInitializing   0          16s
+php-helloworld-1-build   1/1     Running           0          17s
+^C[student@workstation ~]$ oc get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+php-helloworld-1-build   1/1     Running   0          30s
+[student@workstation ~]$ oc logs -f bc/php-helloworld
+Adding cluster TLS certificate authority to trust store
+Cloning "https://github.com/MasiGit/DO180-apps" ...
+	Commit:	f7cd8963ef353d9173c3a21dcccf402f3616840b (Initial commit, including all apps previously in course)
+	Author:	Jordi Sola <someth2say@gmail.com>
+	Date:	Fri Oct 4 13:04:03 2019 +0200
+Adding cluster TLS certificate authority to trust store
+Adding cluster TLS certificate authority to trust store
+Caching blobs under "/var/cache/blobs".
+Getting image source signatures
+Copying blob sha256:ea028fb6761cebeea82e8313fd8f3b3763eef1beaa1f1d1b3ba828126d766ea1
+Copying blob sha256:9b0c218cbfb1a6d2db936bec28fd826b10399ecb4e3db3cf3bf69ebb4c37bfa3
+Copying blob sha256:93156a512b9854bb32007f4b7f7bb31f3ec271c86f5f20b7617a1b9e3e62577b
+Copying blob sha256:d97064154091d2ee58f5ef88d8b27739257a3f10c9629399b166d49eb3d73bfe
+Copying blob sha256:f8c518873786e7b92236e6abb32fb16c6ba09040dafd2b860ea79ebdcf10beaf
+Copying config sha256:fff7ff0b8ac76304da2e92b6c21efb9c03075146f1ff0fd4f7f255cd3cc3e971
+Writing manifest to image destination
+Storing signatures
+Generating dockerfile with builder image image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569
+STEP 1: FROM image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569
+STEP 2: LABEL "io.openshift.build.commit.message"="Initial commit, including all apps previously in course"       "io.openshift.build.source-location"="https://github.com/MasiGit/DO180-apps"       "io.openshift.build.source-context-dir"="php-helloworld"       "io.openshift.build.image"="image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569"       "io.openshift.build.commit.author"="Jordi Sola <someth2say@gmail.com>"       "io.openshift.build.commit.date"="Fri Oct 4 13:04:03 2019 +0200"       "io.openshift.build.commit.id"="f7cd8963ef353d9173c3a21dcccf402f3616840b"       "io.openshift.build.commit.ref"="master"
+STEP 3: ENV OPENSHIFT_BUILD_NAME="php-helloworld-1"     OPENSHIFT_BUILD_NAMESPACE="developer-route"     OPENSHIFT_BUILD_SOURCE="https://github.com/MasiGit/DO180-apps"     OPENSHIFT_BUILD_COMMIT="f7cd8963ef353d9173c3a21dcccf402f3616840b"
+STEP 4: USER root
+STEP 5: COPY upload/src /tmp/src
+STEP 6: RUN chown -R 1001:0 /tmp/src
+time="2022-05-25T11:25:40Z" level=warning msg="Path \"/run/secrets/etc-pki-entitlement\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+time="2022-05-25T11:25:40Z" level=warning msg="Path \"/run/secrets/redhat.repo\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+STEP 7: USER 1001
+STEP 8: RUN /usr/libexec/s2i/assemble
+time="2022-05-25T11:25:41Z" level=warning msg="Path \"/run/secrets/etc-pki-entitlement\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+time="2022-05-25T11:25:41Z" level=warning msg="Path \"/run/secrets/redhat.repo\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+---> Installing application source...
+=> sourcing 20-copy-config.sh ...
+---> 11:25:42     Processing additional arbitrary httpd configuration provided by s2i ...
+=> sourcing 00-documentroot.conf ...
+=> sourcing 50-mpm-tuning.conf ...
+=> sourcing 40-ssl-certs.sh ...
+STEP 9: CMD /usr/libexec/s2i/run
+STEP 10: COMMIT temp.builder.openshift.io/developer-route/php-helloworld-1:bef8c610
+Getting image source signatures
+Copying blob sha256:01d2fb86653538b491b461c58ff5c3f5659c808d75efd99ba3ae4f1427db90ab
+Copying blob sha256:9e12a51e507ab7be1c0b59578cbdbbdabe739d61ed8d4b70fb7644408ef97fa8
+Copying blob sha256:62adab66aca00b517ea945ad5141f291cd6c486b393bcf80900c031d71df4094
+Copying blob sha256:249169e7ab4c9425c24c485f1a72ea1af277afe58b5388ba8732efa919774b35
+Copying blob sha256:10d4f57e839c1a8e22325ab7948ca9428d4d3abce276812a44103b59a7e05aab
+Copying blob sha256:8c60f5d42c9b93e669f7bb140734dc8100828a77d6180da7d9d8440c968de361
+Copying config sha256:43cf46b721790b987c1e3362312a2e5f82028c03480fe08ad5d918e1d0941574
+Writing manifest to image destination
+Storing signatures
+--> 43cf46b7217
+43cf46b721790b987c1e3362312a2e5f82028c03480fe08ad5d918e1d0941574
+
+Pushing image image-registry.openshift-image-registry.svc:5000/developer-route/php-helloworld:latest ...
+Getting image source signatures
+Copying blob sha256:8c60f5d42c9b93e669f7bb140734dc8100828a77d6180da7d9d8440c968de361
+Copying blob sha256:d97064154091d2ee58f5ef88d8b27739257a3f10c9629399b166d49eb3d73bfe
+Copying blob sha256:f8c518873786e7b92236e6abb32fb16c6ba09040dafd2b860ea79ebdcf10beaf
+Copying blob sha256:93156a512b9854bb32007f4b7f7bb31f3ec271c86f5f20b7617a1b9e3e62577b
+Copying blob sha256:9b0c218cbfb1a6d2db936bec28fd826b10399ecb4e3db3cf3bf69ebb4c37bfa3
+Copying blob sha256:ea028fb6761cebeea82e8313fd8f3b3763eef1beaa1f1d1b3ba828126d766ea1
+Copying config sha256:43cf46b721790b987c1e3362312a2e5f82028c03480fe08ad5d918e1d0941574
+Writing manifest to image destination
+Storing signatures
+Successfully pushed image-registry.openshift-image-registry.svc:5000/developer-route/php-helloworld@sha256:ea1b52c0d8846c590235f873a71eccfb904c2432d60e68bc08b1adb940b1764a
+Push successful
+[student@workstation ~]$ oc describe svc/php-helloworld
+Name:              php-helloworld
+Namespace:         developer-route
+Labels:            app=php-helloworld
+                   app.kubernetes.io/component=php-helloworld
+                   app.kubernetes.io/instance=php-helloworld
+Annotations:       openshift.io/generated-by: OpenShiftNewApp
+Selector:          deployment=php-helloworld
+Type:              ClusterIP
+IP:                172.30.243.103
+Port:              8080-tcp  8080/TCP
+TargetPort:        8080/TCP
+Endpoints:         10.8.0.244:8080
+Port:              8443-tcp  8443/TCP
+TargetPort:        8443/TCP
+Endpoints:         10.8.0.244:8443
+Session Affinity:  None
+Events:            <none>
+[student@workstation ~]$ oc expose svc/php-helloworld
+route.route.openshift.io/php-helloworld exposed
+[student@workstation ~]$ oc describe route
+Name:			php-helloworld
+Namespace:		developer-route
+Created:		11 seconds ago
+Labels:			app=php-helloworld
+			app.kubernetes.io/component=php-helloworld
+			app.kubernetes.io/instance=php-helloworld
+Annotations:		openshift.io/host.generated=true
+Requested Host:		php-helloworld-developer-route.apps.ocp4.example.com
+			   exposed on router default (host apps.ocp4.example.com) 11 seconds ago
+Path:			<none>
+TLS Termination:	<none>
+Insecure Policy:	<none>
+Endpoint Port:		8080-tcp
+
+Service:	php-helloworld
+Weight:		100 (100%)
+Endpoints:	10.8.0.244:8080, 10.8.0.244:8443
+[student@workstation ~]$ curl php-helloworld-developer-route.apps.ocp4.example.com
+Hello, World! php version is 7.3.20
+[student@workstation ~]$ oc expose svc/php-helloworld --name customphp.apps.ocp4.example.com
+route.route.openshift.io/customphp.apps.ocp4.example.com exposed
+[student@workstation ~]$ oc describe route
+Name:			customphp.apps.ocp4.example.com
+Namespace:		developer-route
+Created:		11 seconds ago
+Labels:			app=php-helloworld
+			app.kubernetes.io/component=php-helloworld
+			app.kubernetes.io/instance=php-helloworld
+Annotations:		openshift.io/host.generated=true
+Requested Host:		customphp-apps-ocp4-example-com-developer-route.apps.ocp4.example.com
+			   exposed on router default (host apps.ocp4.example.com) 11 seconds ago
+Path:			<none>
+TLS Termination:	<none>
+Insecure Policy:	<none>
+Endpoint Port:		8080-tcp
+
+Service:	php-helloworld
+Weight:		100 (100%)
+Endpoints:	10.8.0.244:8080, 10.8.0.244:8443
+
+
+Name:			php-helloworld
+Namespace:		developer-route
+Created:		3 minutes ago
+Labels:			app=php-helloworld
+			app.kubernetes.io/component=php-helloworld
+			app.kubernetes.io/instance=php-helloworld
+Annotations:		openshift.io/host.generated=true
+Requested Host:		php-helloworld-developer-route.apps.ocp4.example.com
+			   exposed on router default (host apps.ocp4.example.com) 3 minutes ago
+Path:			<none>
+TLS Termination:	<none>
+Insecure Policy:	<none>
+Endpoint Port:		8080-tcp
+
+Service:	php-helloworld
+Weight:		100 (100%)
+Endpoints:	10.8.0.244:8080, 10.8.0.244:8443
+[student@workstation ~]$ curl 
+curl: try 'curl --help' or 'curl --manual' for more information
+[student@workstation ~]$ 
+[student@workstation ~]$ curl customphp.apps.ocp4.example.com
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style type="text/css">
+  /*!
+   * Bootstrap v3.3.5 (http://getbootstrap.com)
+   * Copyright 2011-2015 Twitter, Inc.
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   */
+  /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+  html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+  }
+  h1 {
+    font-size: 1.7em;
+    font-weight: 400;
+    line-height: 1.3;
+    margin: 0.68em 0;
+  }
+  * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  *:before,
+  *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  html {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.66666667;
+    font-size: 13px;
+    color: #333333;
+    background-color: #ffffff;
+    margin: 2em 1em;
+  }
+  p {
+    margin: 0 0 10px;
+    font-size: 13px;
+  }
+  .alert.alert-info {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    background-color: #f5f5f5;
+    border-color: #8b8d8f;
+    color: #363636;
+    margin-top: 30px;
+  }
+  .alert p {
+    padding-left: 35px;
+  }
+  a {
+    color: #0088ce;
+  }
+
+  ul {
+    position: relative;
+    padding-left: 51px;
+  }
+  p.info {
+    position: relative;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  p.info:before, p.info:after {
+    content: "";
+    position: absolute;
+    top: 9%;
+    left: 0;
+  }
+  p.info:before {
+    content: "i";
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    font-family: serif;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 21px;
+    text-align: center;
+    color: #fff;
+    background: #4d5258;
+    border-radius: 16px;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      margin: 4em 3em;
+    }
+    h1 {
+      font-size: 2.15em;}
+  }
+
+  </style>
+  </head>
+  <body>
+    <div>
+      <h1>Application is not available</h1>
+      <p>The application is currently not serving requests at this endpoint. It may not have been started or is still starting.</p>
+
+      <div class="alert alert-info">
+        <p class="info">
+          Possible reasons you are seeing this page:
+        </p>
+        <ul>
+          <li>
+            <strong>The host doesn't exist.</strong>
+            Make sure the hostname was typed correctly and that a route matching this hostname exists.
+          </li>
+          <li>
+            <strong>The host exists, but doesn't have a matching path.</strong>
+            Check if the URL path was typed correctly and that the route was created using the desired path.
+          </li>
+          <li>
+            <strong>Route and path matches, but all pods are down.</strong>
+            Make sure that the resources exposed by this route (pods, services, deployment configs, etc) have at least one pod running.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
+[student@workstation ~]$ curl customphp.apps.ocp4.exa^Cle.com
+[student@workstation ~]$ oc expose svc/php-helloworld --name customphp.apps.ocp4.example.com^C
+[student@workstation ~]$ curl customphp.apps.ocp4.example.com
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style type="text/css">
+  /*!
+   * Bootstrap v3.3.5 (http://getbootstrap.com)
+   * Copyright 2011-2015 Twitter, Inc.
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   */
+  /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+  html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+  }
+  h1 {
+    font-size: 1.7em;
+    font-weight: 400;
+    line-height: 1.3;
+    margin: 0.68em 0;
+  }
+  * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  *:before,
+  *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  html {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.66666667;
+    font-size: 13px;
+    color: #333333;
+    background-color: #ffffff;
+    margin: 2em 1em;
+  }
+  p {
+    margin: 0 0 10px;
+    font-size: 13px;
+  }
+  .alert.alert-info {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    background-color: #f5f5f5;
+    border-color: #8b8d8f;
+    color: #363636;
+    margin-top: 30px;
+  }
+  .alert p {
+    padding-left: 35px;
+  }
+  a {
+    color: #0088ce;
+  }
+
+  ul {
+    position: relative;
+    padding-left: 51px;
+  }
+  p.info {
+    position: relative;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  p.info:before, p.info:after {
+    content: "";
+    position: absolute;
+    top: 9%;
+    left: 0;
+  }
+  p.info:before {
+    content: "i";
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    font-family: serif;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 21px;
+    text-align: center;
+    color: #fff;
+    background: #4d5258;
+    border-radius: 16px;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      margin: 4em 3em;
+    }
+    h1 {
+      font-size: 2.15em;}
+  }
+
+  </style>
+  </head>
+  <body>
+    <div>
+      <h1>Application is not available</h1>
+      <p>The application is currently not serving requests at this endpoint. It may not have been started or is still starting.</p>
+
+      <div class="alert alert-info">
+        <p class="info">
+          Possible reasons you are seeing this page:
+        </p>
+        <ul>
+          <li>
+            <strong>The host doesn't exist.</strong>
+            Make sure the hostname was typed correctly and that a route matching this hostname exists.
+          </li>
+          <li>
+            <strong>The host exists, but doesn't have a matching path.</strong>
+            Check if the URL path was typed correctly and that the route was created using the desired path.
+          </li>
+          <li>
+            <strong>Route and path matches, but all pods are down.</strong>
+            Make sure that the resources exposed by this route (pods, services, deployment configs, etc) have at least one pod running.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
+[student@workstation ~]$ oc get route
+NAME                              HOST/PORT                                                               PATH   SERVICES         PORT       TERMINATION   WILDCARD
+customphp.apps.ocp4.example.com   customphp-apps-ocp4-example-com-developer-route.apps.ocp4.example.com          php-helloworld   8080-tcp                 None
+php-helloworld                    php-helloworld-developer-route.apps.ocp4.example.com                           php-helloworld   8080-tcp                 None
+[student@workstation ~]$ curl customphp-apps-ocp4-example-com-developer-route.apps.ocp4.example.com
+Hello, World! php version is 7.3.20
+[student@workstation ~]$ oc expose svc/php-helloworld --hostname  customphp.apps.ocp4.example.com --name newroute
+route.route.openshift.io/newroute exposed
+[student@workstation ~]$ oc get route
+NAME                              HOST/PORT                                                               PATH   SERVICES         PORT       TERMINATION   WILDCARD
+customphp.apps.ocp4.example.com   customphp-apps-ocp4-example-com-developer-route.apps.ocp4.example.com          php-helloworld   8080-tcp                 None
+newroute                          customphp.apps.ocp4.example.com                                                php-helloworld   8080-tcp                 None
+php-helloworld                    php-helloworld-developer-route.apps.ocp4.example.com                           php-helloworld   8080-tcp                 None
+[student@workstation ~]$ curl customphp.apps.ocp4.example.com
+Hello, World! php version is 7.3.20
+[student@workstation ~]$ oc get route
+NAME                              HOST/PORT                                                               PATH   SERVICES         PORT       TERMINATION   WILDCARD
+customphp.apps.ocp4.example.com   customphp-apps-ocp4-example-com-developer-route.apps.ocp4.example.com          php-helloworld   8080-tcp                 None
+newroute                          customphp.apps.ocp4.example.com                                                php-helloworld   8080-tcp                 None
+php-helloworld                    php-helloworld-developer-route.apps.ocp4.example.com                           php-helloworld   8080-tcp                 None
+[student@workstation ~]$ lab openshift-routes finish
+
+Completing the Guided Exercise: Exposing a Service as a Route
+
+ · Removing OpenShift project 'developer-route'................  SUCCESS
+[student@workstation ~]$ 
+[student@workstation ~]$ ^C
+[student@workstation ~]$ ls
+Desktop  DO180  DO180-apps  Documents  Downloads  github_token.txt  local  Music  Pictures  Public  Templates  venv  Videos
+[student@workstation ~]$ cd DO180-apps/
+[student@workstation DO180-apps]$ vi fullop.txt
+[student@workstation DO180-apps]$ ^C
+[student@workstation DO180-apps]$ git add .
+[student@workstation DO180-apps]$ git commit -m "FullOP"
+[l1 0523037] FullOP
+ 1 file changed, 1140 insertions(+)
+ create mode 100644 fullop.txt
+[student@workstation DO180-apps]$ cd ..
+[student@workstation ~]$ cat github_token.txt 
+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
+[student@workstation ~]$ cd DO180-apps/
+[student@workstation DO180-apps]$ git push origin l1
+Username for 'https://github.com': MasiGit
+Password for 'https://MasiGit@github.com': 
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 11.85 KiB | 5.92 MiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/MasiGit/DO180-apps
+   54faccb..0523037  l1 -> l1
+[student@workstation DO180-apps]$ lab openshift-s2i start
+
+Setting up workstation for the Guided Excercise: Creating a Containerized Application with Source-to-Image
+
+ · Installing the tree command.................................  SUCCESS
+ Checking local clone of the applications repository:
+ · Folder '/home/student/DO180-apps' is a git repo.............  SUCCESS
+ · Git repo '/home/student/DO180-apps' has no pending changes..  SUCCESS
+ Verifying the OpenShift cluster is running:
+ · Log in on OpenShift.........................................  SUCCESS
+ · Check the internal registry is up and running...............  SUCCESS
+ · Ensuring the 'developer-s2i' project does not exist.........  SUCCESS
+[student@workstation DO180-apps]$ git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+[student@workstation DO180-apps]$ git checkout -b s2i
+Switched to a new branch 's2i'
+[student@workstation DO180-apps]$ git push -u origin s2i
+Username for 'https://github.com': MasiGit
+Password for 'https://MasiGit@github.com': 
+Branch 's2i' set up to track remote branch 's2i' from 'origin'.
+Everything up-to-date
+[student@workstation DO180-apps]$ ls
+example  nodejs-app  nodejs-helloworld  php-helloworld  README.md  temps  todoapp
+[student@workstation DO180-apps]$ oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+(reverse-i-search)`oc new': ^C new-project 
+[student@workstation DO180-apps]$ oc new-project ${RHT_OCP4_DEV_USER}-s2i
+Now using project "developer-s2i" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation DO180-apps]$ oc new-app php:7.3 --name=php-helloworld https://github.com/${RHT_OCP4_GITHUB_USER}/DO180-apps#s2i --context-dir php-helloworld
+--> Found image fff7ff0 (11 months old) in image stream "openshift/php" under tag "7.3" for "php:7.3"
+
+    Apache 2.4 with PHP 7.3 
+    ----------------------- 
+    PHP 7.3 available as container is a base platform for building and running various PHP 7.3 applications and frameworks. PHP is an HTML-embedded scripting language. PHP attempts to make it easy for developers to write dynamically generated web pages. PHP also offers built-in database integration for several commercial and non-commercial database management systems, so writing a database-enabled webpage with PHP is fairly simple. The most common use of PHP coding is probably as a replacement for CGI scripts.
+
+    Tags: builder, php, php73, rh-php73
+
+    * The source repository appears to match: php
+    * A source build using source code from https://github.com/MasiGit/DO180-apps#s2i will be created
+      * The resulting image will be pushed to image stream tag "php-helloworld:latest"
+      * Use 'oc start-build' to trigger a new build
+
+--> Creating resources ...
+    imagestream.image.openshift.io "php-helloworld" created
+    buildconfig.build.openshift.io "php-helloworld" created
+    deployment.apps "php-helloworld" created
+    service "php-helloworld" created
+--> Success
+    Build scheduled, use 'oc logs -f buildconfig/php-helloworld' to track its progress.
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/php-helloworld' 
+    Run 'oc status' to view your app.
+[student@workstation DO180-apps]$ oc get pods -w
+NAME                     READY   STATUS    RESTARTS   AGE
+php-helloworld-1-build   1/1     Running   0          8s
+php-helloworld-74f9d8bd9-hm7nf   0/1     Pending   0          0s
+php-helloworld-74f9d8bd9-hm7nf   0/1     Pending   0          0s
+php-helloworld-74f9d8bd9-hm7nf   0/1     ContainerCreating   0          0s
+php-helloworld-1-build           0/1     Completed           0          26s
+php-helloworld-74f9d8bd9-hm7nf   0/1     ContainerCreating   0          2s
+php-helloworld-74f9d8bd9-hm7nf   1/1     Running             0          4s
+^C[student@workstation DO180-apps]$ oc logs --all-containers -f php-helloworld-1-build
+Adding cluster TLS certificate authority to trust store
+Caching blobs under "/var/cache/blobs".
+Getting image source signatures
+Copying blob sha256:9b0c218cbfb1a6d2db936bec28fd826b10399ecb4e3db3cf3bf69ebb4c37bfa3
+Adding cluster TLS certificate authority to trust store
+Copying blob sha256:93156a512b9854bb32007f4b7f7bb31f3ec271c86f5f20b7617a1b9e3e62577b
+Copying blob sha256:f8c518873786e7b92236e6abb32fb16c6ba09040dafd2b860ea79ebdcf10beaf
+Copying blob sha256:ea028fb6761cebeea82e8313fd8f3b3763eef1beaa1f1d1b3ba828126d766ea1
+Copying blob sha256:d97064154091d2ee58f5ef88d8b27739257a3f10c9629399b166d49eb3d73bfe
+Copying config sha256:fff7ff0b8ac76304da2e92b6c21efb9c03075146f1ff0fd4f7f255cd3cc3e971
+Writing manifest to image destination
+Storing signatures
+Generating dockerfile with builder image image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569
+STEP 1: FROM image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569
+STEP 2: LABEL "io.openshift.build.source-location"="https://github.com/MasiGit/DO180-apps"       "io.openshift.build.source-context-dir"="php-helloworld"       "io.openshift.build.image"="image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569"       "io.openshift.build.commit.author"="Jordi Sola <someth2say@gmail.com>"       "io.openshift.build.commit.date"="Fri Oct 4 13:04:03 2019 +0200"       "io.openshift.build.commit.id"="f7cd8963ef353d9173c3a21dcccf402f3616840b"       "io.openshift.build.commit.ref"="s2i"       "io.openshift.build.commit.message"="Initial commit, including all apps previously in course"
+STEP 3: ENV OPENSHIFT_BUILD_NAME="php-helloworld-1"     OPENSHIFT_BUILD_NAMESPACE="developer-s2i"     OPENSHIFT_BUILD_SOURCE="https://github.com/MasiGit/DO180-apps"     OPENSHIFT_BUILD_REFERENCE="s2i"     OPENSHIFT_BUILD_COMMIT="f7cd8963ef353d9173c3a21dcccf402f3616840b"
+STEP 4: USER root
+STEP 5: COPY upload/src /tmp/src
+STEP 6: RUN chown -R 1001:0 /tmp/src
+time="2022-05-25T12:10:33Z" level=warning msg="Path \"/run/secrets/etc-pki-entitlement\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+time="2022-05-25T12:10:33Z" level=warning msg="Path \"/run/secrets/redhat.repo\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+STEP 7: USER 1001
+STEP 8: RUN /usr/libexec/s2i/assemble
+time="2022-05-25T12:10:33Z" level=warning msg="Path \"/run/secrets/etc-pki-entitlement\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+time="2022-05-25T12:10:33Z" level=warning msg="Path \"/run/secrets/redhat.repo\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+---> Installing application source...
+=> sourcing 20-copy-config.sh ...
+---> 12:10:34     Processing additional arbitrary httpd configuration provided by s2i ...
+=> sourcing 00-documentroot.conf ...
+=> sourcing 50-mpm-tuning.conf ...
+=> sourcing 40-ssl-certs.sh ...
+STEP 9: CMD /usr/libexec/s2i/run
+STEP 10: COMMIT temp.builder.openshift.io/developer-s2i/php-helloworld-1:9b5d91a9
+Getting image source signatures
+Copying blob sha256:01d2fb86653538b491b461c58ff5c3f5659c808d75efd99ba3ae4f1427db90ab
+Copying blob sha256:9e12a51e507ab7be1c0b59578cbdbbdabe739d61ed8d4b70fb7644408ef97fa8
+Adding cluster TLS certificate authority to trust store
+Cloning "https://github.com/MasiGit/DO180-apps" ...
+	Commit:	f7cd8963ef353d9173c3a21dcccf402f3616840b (Initial commit, including all apps previously in course)
+	Author:	Jordi Sola <someth2say@gmail.com>
+Copying blob sha256:62adab66aca00b517ea945ad5141f291cd6c486b393bcf80900c031d71df4094
+Copying blob sha256:249169e7ab4c9425c24c485f1a72ea1af277afe58b5388ba8732efa919774b35
+Copying blob sha256:10d4f57e839c1a8e22325ab7948ca9428d4d3abce276812a44103b59a7e05aab
+Copying blob sha256:85c8b85e2d0def7867d8fca947617ab8649b2024856ee71b80cef4b7cce27769
+Copying config sha256:bf79d52b8ce0225c753f59588a182826cb7da85401f0143252329eba09aaf7f4
+	Date:	Fri Oct 4 13:04:03 2019 +0200
+Writing manifest to image destination
+Storing signatures
+--> bf79d52b8ce
+bf79d52b8ce0225c753f59588a182826cb7da85401f0143252329eba09aaf7f4
+
+Pushing image image-registry.openshift-image-registry.svc:5000/developer-s2i/php-helloworld:latest ...
+Getting image source signatures
+Copying blob sha256:85c8b85e2d0def7867d8fca947617ab8649b2024856ee71b80cef4b7cce27769
+Copying blob sha256:9b0c218cbfb1a6d2db936bec28fd826b10399ecb4e3db3cf3bf69ebb4c37bfa3
+Copying blob sha256:d97064154091d2ee58f5ef88d8b27739257a3f10c9629399b166d49eb3d73bfe
+Copying blob sha256:93156a512b9854bb32007f4b7f7bb31f3ec271c86f5f20b7617a1b9e3e62577b
+Copying blob sha256:ea028fb6761cebeea82e8313fd8f3b3763eef1beaa1f1d1b3ba828126d766ea1
+Copying blob sha256:f8c518873786e7b92236e6abb32fb16c6ba09040dafd2b860ea79ebdcf10beaf
+Copying config sha256:bf79d52b8ce0225c753f59588a182826cb7da85401f0143252329eba09aaf7f4
+Writing manifest to image destination
+Storing signatures
+Successfully pushed image-registry.openshift-image-registry.svc:5000/developer-s2i/php-helloworld@sha256:25544f6d8342d97fdd9328b7fb8ca635101b718fc3cce762438d74745a748daa
+Push successful
+[student@workstation DO180-apps]$ oc describe deployment/php-helloworld
+Name:                   php-helloworld
+Namespace:              developer-s2i
+CreationTimestamp:      Wed, 25 May 2022 08:10:09 -0400
+Labels:                 app=php-helloworld
+                        app.kubernetes.io/component=php-helloworld
+                        app.kubernetes.io/instance=php-helloworld
+Annotations:            deployment.kubernetes.io/revision: 2
+                        image.openshift.io/triggers:
+                          [{"from":{"kind":"ImageStreamTag","name":"php-helloworld:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"php-helloworld\")...
+                        openshift.io/generated-by: OpenShiftNewApp
+Selector:               deployment=php-helloworld
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:       deployment=php-helloworld
+  Annotations:  openshift.io/generated-by: OpenShiftNewApp
+  Containers:
+   php-helloworld:
+    Image:        image-registry.openshift-image-registry.svc:5000/developer-s2i/php-helloworld@sha256:25544f6d8342d97fdd9328b7fb8ca635101b718fc3cce762438d74745a748daa
+    Ports:        8080/TCP, 8443/TCP
+    Host Ports:   0/TCP, 0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   php-helloworld-74f9d8bd9 (1/1 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  111s  deployment-controller  Scaled up replica set php-helloworld-7595dffb9d to 1
+  Normal  ScalingReplicaSet  84s   deployment-controller  Scaled up replica set php-helloworld-74f9d8bd9 to 1
+  Normal  ScalingReplicaSet  80s   deployment-controller  Scaled down replica set php-helloworld-7595dffb9d to 0
+[student@workstation DO180-apps]$ oc expose service php-helloworld --name ${RHT_OCP4_DEV_USER}-helloworld
+route.route.openshift.io/developer-helloworld exposed
+[student@workstation DO180-apps]$ oc get route
+NAME                   HOST/PORT                                                  PATH   SERVICES         PORT       TERMINATION   WILDCARD
+developer-helloworld   developer-helloworld-developer-s2i.apps.ocp4.example.com          php-helloworld   8080-tcp                 None
+[student@workstation DO180-apps]$ curl -s developer-helloworld-developer-s2i.apps.ocp4.example.com
+Hello, World! php version is 7.3.20
+[student@workstation DO180-apps]$ cd php-helloworld/
+[student@workstation php-helloworld]$ vi index.php 
+[student@workstation php-helloworld]$ git add .
+[student@workstation php-helloworld]$ git commit -m 'CHnaged index page contents'
+[s2i 886c1e4] CHnaged index page contents
+ 1 file changed, 1 insertion(+)
+[student@workstation php-helloworld]$ git push origin s2i
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 419 bytes | 419.00 KiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/MasiGit/DO180-apps
+   f7cd896..886c1e4  s2i -> s2i
+[student@workstation php-helloworld]$ oc start-build php-helloworld 
+build.build.openshift.io/php-helloworld-2 started
+[student@workstation php-helloworld]$ oc logs php-helloworld-2-build -f
+Adding cluster TLS certificate authority to trust store
+Caching blobs under "/var/cache/blobs".
+Getting image source signatures
+Copying blob sha256:ea028fb6761cebeea82e8313fd8f3b3763eef1beaa1f1d1b3ba828126d766ea1
+Copying blob sha256:d97064154091d2ee58f5ef88d8b27739257a3f10c9629399b166d49eb3d73bfe
+Copying blob sha256:f8c518873786e7b92236e6abb32fb16c6ba09040dafd2b860ea79ebdcf10beaf
+Copying blob sha256:93156a512b9854bb32007f4b7f7bb31f3ec271c86f5f20b7617a1b9e3e62577b
+Copying blob sha256:9b0c218cbfb1a6d2db936bec28fd826b10399ecb4e3db3cf3bf69ebb4c37bfa3
+Copying config sha256:fff7ff0b8ac76304da2e92b6c21efb9c03075146f1ff0fd4f7f255cd3cc3e971
+Writing manifest to image destination
+Storing signatures
+Generating dockerfile with builder image image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569
+STEP 1: FROM image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569
+STEP 2: LABEL "io.openshift.build.source-location"="https://github.com/MasiGit/DO180-apps"       "io.openshift.build.source-context-dir"="php-helloworld"       "io.openshift.build.image"="image-registry.openshift-image-registry.svc:5000/openshift/php@sha256:c909f78a86779fa9d87d937b0a765d074cb5a3b2d34fd07266cb4fcfe1b7e569"       "io.openshift.build.commit.author"="Student User <student@workstation.lab.example.com>"       "io.openshift.build.commit.date"="Wed May 25 08:16:46 2022 -0400"       "io.openshift.build.commit.id"="886c1e40d1ad30ef2459c3556701b44f7bb6c10b"       "io.openshift.build.commit.ref"="s2i"       "io.openshift.build.commit.message"="CHnaged index page contents"
+STEP 3: ENV OPENSHIFT_BUILD_NAME="php-helloworld-2"     OPENSHIFT_BUILD_NAMESPACE="developer-s2i"     OPENSHIFT_BUILD_SOURCE="https://github.com/MasiGit/DO180-apps"     OPENSHIFT_BUILD_REFERENCE="s2i"     OPENSHIFT_BUILD_COMMIT="886c1e40d1ad30ef2459c3556701b44f7bb6c10b"
+STEP 4: USER root
+STEP 5: COPY upload/src /tmp/src
+STEP 6: RUN chown -R 1001:0 /tmp/src
+time="2022-05-25T12:17:46Z" level=warning msg="Path \"/run/secrets/etc-pki-entitlement\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+time="2022-05-25T12:17:46Z" level=warning msg="Path \"/run/secrets/redhat.repo\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+STEP 7: USER 1001
+STEP 8: RUN /usr/libexec/s2i/assemble
+time="2022-05-25T12:17:47Z" level=warning msg="Path \"/run/secrets/etc-pki-entitlement\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+time="2022-05-25T12:17:47Z" level=warning msg="Path \"/run/secrets/redhat.repo\" from \"/etc/containers/mounts.conf\" doesn't exist, skipping"
+---> Installing application source...
+=> sourcing 20-copy-config.sh ...
+---> 12:17:47     Processing additional arbitrary httpd configuration provided by s2i ...
+=> sourcing 00-documentroot.conf ...
+=> sourcing 50-mpm-tuning.conf ...
+=> sourcing 40-ssl-certs.sh ...
+STEP 9: CMD /usr/libexec/s2i/run
+STEP 10: COMMIT temp.builder.openshift.io/developer-s2i/php-helloworld-2:f4c8ffcc
+Getting image source signatures
+Copying blob sha256:01d2fb86653538b491b461c58ff5c3f5659c808d75efd99ba3ae4f1427db90ab
+Copying blob sha256:9e12a51e507ab7be1c0b59578cbdbbdabe739d61ed8d4b70fb7644408ef97fa8
+Copying blob sha256:62adab66aca00b517ea945ad5141f291cd6c486b393bcf80900c031d71df4094
+Copying blob sha256:249169e7ab4c9425c24c485f1a72ea1af277afe58b5388ba8732efa919774b35
+Copying blob sha256:10d4f57e839c1a8e22325ab7948ca9428d4d3abce276812a44103b59a7e05aab
+Copying blob sha256:a5f25d2f85a4016ff34c71299379ea2b65988e485f28ccc06a1eab44cb6f360d
+Copying config sha256:4bcf9134159686ca95759211e5ea3a7574f7da8cb2da44076822f19ebc74117a
+Writing manifest to image destination
+Storing signatures
+--> 4bcf9134159
+4bcf9134159686ca95759211e5ea3a7574f7da8cb2da44076822f19ebc74117a
+
+Pushing image image-registry.openshift-image-registry.svc:5000/developer-s2i/php-helloworld:latest ...
+Getting image source signatures
+Copying blob sha256:ea028fb6761cebeea82e8313fd8f3b3763eef1beaa1f1d1b3ba828126d766ea1
+Copying blob sha256:9b0c218cbfb1a6d2db936bec28fd826b10399ecb4e3db3cf3bf69ebb4c37bfa3
+Copying blob sha256:d97064154091d2ee58f5ef88d8b27739257a3f10c9629399b166d49eb3d73bfe
+Copying blob sha256:f8c518873786e7b92236e6abb32fb16c6ba09040dafd2b860ea79ebdcf10beaf
+Copying blob sha256:93156a512b9854bb32007f4b7f7bb31f3ec271c86f5f20b7617a1b9e3e62577b
+Copying blob sha256:a5f25d2f85a4016ff34c71299379ea2b65988e485f28ccc06a1eab44cb6f360d
+Copying config sha256:4bcf9134159686ca95759211e5ea3a7574f7da8cb2da44076822f19ebc74117a
+Writing manifest to image destination
+Storing signatures
+Successfully pushed image-registry.openshift-image-registry.svc:5000/developer-s2i/php-helloworld@sha256:e750fd990de8d1607854951375cc391581bf1e00bababc6f4921b4cea8d2672e
+Push successful
+[student@workstation php-helloworld]$ oc get pods
+NAME                              READY   STATUS        RESTARTS   AGE
+php-helloworld-1-build            0/1     Completed     0          7m50s
+php-helloworld-2-build            0/1     Completed     0          36s
+php-helloworld-6769bc4d67-nk2kk   1/1     Running       0          10s
+php-helloworld-74f9d8bd9-hm7nf    0/1     Terminating   0          7m24s
+[student@workstation php-helloworld]$ oc get pods
+NAME                              READY   STATUS      RESTARTS   AGE
+php-helloworld-1-build            0/1     Completed   0          7m55s
+php-helloworld-2-build            0/1     Completed   0          41s
+php-helloworld-6769bc4d67-nk2kk   1/1     Running     0          15s
+[student@workstation php-helloworld]$ oc get pods
+NAME                              READY   STATUS      RESTARTS   AGE
+php-helloworld-1-build            0/1     Completed   0          7m57s
+php-helloworld-2-build            0/1     Completed   0          43s
+php-helloworld-6769bc4d67-nk2kk   1/1     Running     0          17s
+[student@workstation php-helloworld]$ curl -s developer-helloworld-developer-s2i.apps.ocp4.example.com
+Hello, World! php version is 7.3.20
+A change is coming!
+[student@workstation php-helloworld]$ lab openshift-s2i finish
+
+Completing the Guided Excercise: Creating a Containerized Application with Source-to-Image
+
+ · Log in on OpenShift.........................................  SUCCESS
+ · Deleting the 'developer-s2i' project........................  SUCCESS
+[student@workstation php-helloworld]$ ^C
+[student@workstation php-helloworld]$ git branch
+  l1
+  master
+* s2i
+[student@workstation php-helloworld]$ git checkout l1
+Switched to branch 'l1'
+Your branch is up to date with 'origin/l1'.
+[student@workstation php-helloworld]$ git commit -m "FullOp2"
+On branch l1
+Your branch is up to date with 'origin/l1'.
+
+Changes not staged for commit:
+	modified:   ../fullop.txt
+
+no changes added to commit
+[student@workstation php-helloworld]$ git add .
+[student@workstation php-helloworld]$ git commit -m "FullOp2"
+On branch l1
+Your branch is up to date with 'origin/l1'.
+
+Changes not staged for commit:
+	modified:   ../fullop.txt
+
+no changes added to commit
+[student@workstation php-helloworld]$ cd ..
+[student@workstation DO180-apps]$ git add .
+[student@workstation DO180-apps]$ git commit -m "FullOp2"
+[l1 8f926db] FullOp2
+ 1 file changed, 321 insertions(+), 1 deletion(-)
+[student@workstation DO180-apps]$ git push origin l1
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 3.13 KiB | 3.13 MiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/MasiGit/DO180-apps
+   0523037..8f926db  l1 -> l1
+[student@workstation DO180-apps]$ ls
+-d  -e  example  fullop.txt  history.txt  nodejs-app  nodejs-helloworld  php-helloworld  README.md  temps  todoapp
+[student@workstation DO180-apps]$ lab multicontainer-application start
+
+Setting up workstation for the Guided Exercise: Creating an Application on OpenShift
+
+ · Checking podman configuration...............................  SUCCESS
+
+ Verifying the OpenShift cluster is running:
+ · Log in on OpenShift.........................................  SUCCESS
+ · Check the internal registry is up and running...............  SUCCESS
+ · Ensure application project does not exist...................  SUCCESS
+ · Downloading starter project.................................  SUCCESS
+ · Downloading solution project................................  SUCCESS
+
+Setup successful. Please proceed with the exercise.
+
+
+[student@workstation DO180-apps]$ oc login -u ${RHT_OCP4_DEV_USER} -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation DO180-apps]$ oc new-project ${RHT_OCP4_DEV_USER}-application
+Now using project "developer-application" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation DO180-apps]$ vi /home/student/DO180/labs/multicontainer-application/todo-app.yml 
+[student@workstation DO180-apps]$ cd ..
+[student@workstation ~]$ oc create -f /home/student/DO180/labs/multicontainer-application/todo-app.yml
+pod/mysql created
+pod/todoapi created
+service/todoapi created
+service/mysql created
+persistentvolumeclaim/dbclaim created
+[student@workstation ~]$ oc get pods -w
+NAME      READY   STATUS              RESTARTS   AGE
+mysql     0/1     ContainerCreating   0          11s
+todoapi   0/1     ContainerCreating   0          11s
+todoapi   0/1     ContainerCreating   0          11s
+mysql     0/1     ContainerCreating   0          11s
+todoapi   1/1     Running             0          23s
+mysql     1/1     Running             0          24s
+[student@workstation ~]$ oc port-forward mysql 3306:3306
+Forwarding from 127.0.0.1:3306 -> 3306
+Forwarding from [::1]:3306 -> 3306
+E0525 09:03:03.151980   74548 portforward.go:233] lost connection to pod
+[student@workstation ~]$ oc port-forward mysql 3306:3306
+Forwarding from 127.0.0.1:3306 -> 3306
+Forwarding from [::1]:3306 -> 3306
+Handling connection for 3306
+^C[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ oc expose service todoapi
+route.route.openshift.io/todoapi exposed
+[student@workstation ~]$ oc status | grep -o "http:.*.com"
+http://todoapi-developer-application.apps.ocp4.example.com
+[student@workstation ~]$ curl -w http://todoapi-developer-application.apps.ocp4.example.com 
+curl: no URL specified!
+curl: try 'curl --help' or 'curl --manual' for more information
+[student@workstation ~]$ curl http://todoapi-developer-application.apps.ocp4.example.com
+{"code":"ResourceNotFound","message":"/ does not exist"}[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ curl http://todoapi-developer-application.apps.ocp4.example.com/todo/api/items/1
+{"id":1,"description":"Pick up newspaper","done":false}[student@workstation ~]$ 
+[student@workstation ~]$ lab multicontainer-application finish 
+
+Completing the Guided Exercise: Creating an Application on OpenShift
+
+ · Log in on OpenShift.........................................  SUCCESS
+ · Removing developer-application project......................  SUCCESS
+ · Removing the project directory..............................  SUCCESS
+ · Removing the solution directory.............................  SUCCESS
+[student@workstation ~]$ ls
+Desktop  DO180  DO180-apps  Documents  Downloads  github_token.txt  local  Music  Pictures  Public  Templates  venv  Videos
+[student@workstation ~]$ git status
+fatal: not a git repository (or any of the parent directories): .git
+[student@workstation ~]$ ls
+Desktop  DO180  DO180-apps  Documents  Downloads  github_token.txt  local  Music  Pictures  Public  Templates  venv  Videos
+[student@workstation ~]$ cd DO180-apps/
+[student@workstation DO180-apps]$ git status
+On branch l1
+Your branch is up to date with 'origin/l1'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	custom-from/
+
+nothing added to commit but untracked files present (use "git add" to track)
+[student@workstation DO180-apps]$ git add .
+[student@workstation DO180-apps]$ git commit -m "Custom files"
+[l1 18e06aa] Custom files
+ 6 files changed, 29 insertions(+)
+ create mode 100644 custom-from/labs/dockerfile-create/.placeholder
+ create mode 100644 custom-from/labs/dockerfile-create/Containerfile
+ create mode 100644 custom-from/labs/manage-networking/db.sql
+ create mode 100644 custom-from/solutions/container-create/create_table.txt
+ create mode 100644 custom-from/solutions/dockerfile-create/Containerfile
+ create mode 100644 custom-from/solutions/manage-networking/db.sql
+[student@workstation DO180-apps]$ git push origin l1
+Username for 'https://github.com': MasiGit
+Password for 'https://MasiGit@github.com': 
+Enumerating objects: 14, done.
+Counting objects: 100% (14/14), done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (10/10), done.
+Writing objects: 100% (13/13), 1.49 KiB | 1.49 MiB/s, done.
+Total 13 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/MasiGit/DO180-apps
+   8f926db..18e06aa  l1 -> l1
+[student@workstation DO180-apps]$ lab install-troubleshoot start
+
+Checking prerequisites for Guided Exercise: Troubleshooting OpenShift Clusters and Applications
+
+ Preparing the student's workstation:
+ · Download exercise files.....................................  SUCCESS
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'install-troubleshoot' project is absent................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Troubleshooting OpenShift Clusters and Applications
+
+ Restoring authentication settings to installation defaults:
+ · Removing 'cluster-admin' role from the 'admin' user.........  SUCCESS
+ · Remove HTPasswd secret: 'localusers'........................  SUCCESS
+ · Remove all configured Identity Providers....................  SUCCESS
+ · Remove all existing users...................................  SUCCESS
+ · Remove all existing identities..............................  SUCCESS
+ Preparing the exercise:
+ · Create project 'install-troubleshoot'.......................  SUCCESS
+ · Deploy PostgreSQL in 'install-troubleshoot'.................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation DO180-apps]$ source /usr/local/etc/ocp4.config 
+[student@workstation DO180-apps]$ oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 61 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation DO180-apps]$ oc get nodes
+NAME       STATUS   ROLES           AGE    VERSION
+master01   Ready    master,worker   316d   v1.19.0+b00ba52
+master02   Ready    master,worker   316d   v1.19.0+b00ba52
+master03   Ready    master,worker   316d   v1.19.0+b00ba52
+[student@workstation DO180-apps]$ oc adm top node
+NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+master01   457m         13%    4362Mi          29%       
+master02   1751m        50%    7220Mi          48%       
+master03   2045m        58%    10149Mi         68%       
+[student@workstation DO180-apps]$ oc adm top node
+NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+master01   457m         13%    4362Mi          29%       
+master02   1288m        36%    7120Mi          47%       
+master03   2045m        58%    10149Mi         68%       
+[student@workstation DO180-apps]$ oc adm top node
+NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+master01   457m         13%    4362Mi          29%       
+master02   1288m        36%    7120Mi          47%       
+master03   1185m        33%    10150Mi         68%       
+[student@workstation DO180-apps]$ oc describe node master01
+Name:               master01
+Roles:              master,worker
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=master01
+                    kubernetes.io/os=linux
+                    node-role.kubernetes.io/master=
+                    node-role.kubernetes.io/worker=
+                    node.openshift.io/os_id=rhcos
+Annotations:        machineconfiguration.openshift.io/currentConfig: rendered-master-b1a0c54d28b5ea30fd3c52965d00edaf
+                    machineconfiguration.openshift.io/desiredConfig: rendered-master-b1a0c54d28b5ea30fd3c52965d00edaf
+                    machineconfiguration.openshift.io/reason: 
+                    machineconfiguration.openshift.io/state: Done
+                    volumes.kubernetes.io/controller-managed-attach-detach: true
+CreationTimestamp:  Tue, 13 Jul 2021 08:14:41 -0400
+Taints:             <none>
+Unschedulable:      false
+Lease:
+  HolderIdentity:  master01
+  AcquireTime:     <unset>
+  RenewTime:       Thu, 26 May 2022 04:56:38 -0400
+Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Thu, 26 May 2022 04:55:28 -0400   Mon, 23 May 2022 07:22:02 -0400   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Thu, 26 May 2022 04:55:28 -0400   Mon, 23 May 2022 07:22:02 -0400   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Thu, 26 May 2022 04:55:28 -0400   Mon, 23 May 2022 07:22:02 -0400   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            True    Thu, 26 May 2022 04:55:28 -0400   Mon, 23 May 2022 07:22:12 -0400   KubeletReady                 kubelet is posting ready status
+Addresses:
+  InternalIP:  192.168.50.10
+  Hostname:    master01
+Capacity:
+  cpu:                4
+  ephemeral-storage:  41391084Ki
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             16419132Ki
+  pods:               250
+Allocatable:
+  cpu:                3500m
+  ephemeral-storage:  37072281128
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             15268156Ki
+  pods:               250
+System Info:
+  Machine ID:                             262632aa4d8943c8a494510d13d9ef20
+  System UUID:                            aab77a1f-619f-45fc-861f-f637ee350c07
+  Boot ID:                                23907065-2b35-446c-90ab-14b26996a3ae
+  Kernel Version:                         4.18.0-193.56.1.el8_2.x86_64
+  OS Image:                               Red Hat Enterprise Linux CoreOS 46.82.202106181041-0 (Ootpa)
+  Operating System:                       linux
+  Architecture:                           amd64
+  Container Runtime Version:              cri-o://1.19.2-6.rhaos4.6.git686e6d9.el8
+  Kubelet Version:                        v1.19.0+b00ba52
+  Kube-Proxy Version:                     v1.19.0+b00ba52
+Non-terminated Pods:                      (23 in total)
+  Namespace                               Name                                  CPU Requests  CPU Limits  Memory Requests  Memory Limits  AGE
+  ---------                               ----                                  ------------  ----------  ---------------  -------------  ---
+  install-troubleshoot                    psql-578f78ccb-c8njn                  0 (0%)        0 (0%)      512Mi (3%)       512Mi (3%)     2m44s
+  openshift-apiserver                     apiserver-648cb74f5-kbqvf             110m (3%)     0 (0%)      250Mi (1%)       0 (0%)         2d21h
+  openshift-authentication                oauth-openshift-7c56dddb97-vvf7v      10m (0%)      0 (0%)      50Mi (0%)        0 (0%)         2m29s
+  openshift-cluster-node-tuning-operator  tuned-c5hxb                           10m (0%)      0 (0%)      50Mi (0%)        0 (0%)         316d
+  openshift-controller-manager            controller-manager-vh6tm              100m (2%)     0 (0%)      100Mi (0%)       0 (0%)         2d21h
+  openshift-dns                           dns-default-ptfpt                     65m (1%)      0 (0%)      110Mi (0%)       512Mi (3%)     316d
+  openshift-etcd                          etcd-master01                         430m (12%)    0 (0%)      860Mi (5%)       0 (0%)         316d
+  openshift-etcd                          etcd-quorum-guard-5bf678d57c-z9qrn    10m (0%)      0 (0%)      5Mi (0%)         0 (0%)         2d21h
+  openshift-image-registry                node-ca-6vzwk                         10m (0%)      0 (0%)      10Mi (0%)        0 (0%)         316d
+  openshift-kube-apiserver                kube-apiserver-master01               340m (9%)     0 (0%)      1224Mi (8%)      0 (0%)         2d21h
+  openshift-kube-controller-manager       kube-controller-manager-master01      100m (2%)     0 (0%)      500Mi (3%)       0 (0%)         316d
+  openshift-kube-scheduler                openshift-kube-scheduler-master01     25m (0%)      0 (0%)      150Mi (1%)       0 (0%)         316d
+  openshift-machine-config-operator       machine-config-daemon-h25rx           40m (1%)      0 (0%)      100Mi (0%)       0 (0%)         316d
+  openshift-machine-config-operator       machine-config-server-49vxx           20m (0%)      0 (0%)      50Mi (0%)        0 (0%)         316d
+  openshift-marketplace                   certified-operators-2kzlp             10m (0%)      0 (0%)      50Mi (0%)        0 (0%)         16h
+  openshift-monitoring                    node-exporter-2mvll                   9m (0%)       0 (0%)      210Mi (1%)       0 (0%)         316d
+  openshift-multus                        multus-2p4cw                          10m (0%)      0 (0%)      150Mi (1%)       0 (0%)         316d
+  openshift-multus                        multus-admission-controller-nztb7     20m (0%)      0 (0%)      20Mi (0%)        0 (0%)         316d
+  openshift-multus                        network-metrics-daemon-55c8x          20m (0%)      0 (0%)      120Mi (0%)       0 (0%)         316d
+  openshift-oauth-apiserver               apiserver-6b9b557cdd-pmxmw            150m (4%)     0 (0%)      200Mi (1%)       0 (0%)         2d21h
+  openshift-sdn                           ovs-kt9cl                             100m (2%)     0 (0%)      400Mi (2%)       0 (0%)         316d
+  openshift-sdn                           sdn-4bm8x                             110m (3%)     0 (0%)      220Mi (1%)       0 (0%)         316d
+  openshift-sdn                           sdn-controller-8smdz                  10m (0%)      0 (0%)      50Mi (0%)        0 (0%)         316d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests      Limits
+  --------           --------      ------
+  cpu                1709m (48%)   0 (0%)
+  memory             5391Mi (36%)  1Gi (6%)
+  ephemeral-storage  0 (0%)        0 (0%)
+  hugepages-1Gi      0 (0%)        0 (0%)
+  hugepages-2Mi      0 (0%)        0 (0%)
+Events:              <none>
+[student@workstation DO180-apps]$ oc get pod -n openshift-image-registry 
+NAME                                               READY   STATUS      RESTARTS   AGE
+cluster-image-registry-operator-64687b967c-94xlj   1/1     Running     0          2d21h
+image-pruner-1653350400-8gbfs                      0/1     Completed   0          2d8h
+image-pruner-1653436800-8w9bd                      0/1     Completed   0          32h
+image-pruner-1653523200-p95kq                      0/1     Completed   0          8h
+image-registry-cdd95f488-fmnjq                     1/1     Running     0          2d21h
+node-ca-4v6fp                                      1/1     Running     0          316d
+node-ca-6vzwk                                      1/1     Running     0          316d
+node-ca-jrwt6                                      1/1     Running     0          316d
+[student@workstation DO180-apps]$ oc logs --tail 3 openshift-image-registry
+Error from server (NotFound): pods "openshift-image-registry" not found
+[student@workstation DO180-apps]$ oc logs --tail 3 openshift-image-registry cluster-image-registry-operator-64687b967c-94xlj
+Error from server (NotFound): pods "openshift-image-registry" not found
+[student@workstation DO180-apps]$ oc logs --tail 3 -n openshift-image-registry cluster-image-registry-operator-64687b967c-94xlj
+I0526 08:59:43.866904       1 controllerimagepruner.go:323] event from image pruner workqueue successfully processed
+I0526 08:59:43.867592       1 imageregistrycertificates.go:97] ImageRegistryCertificatesController: event from workqueue successfully processed
+I0526 08:59:43.922712       1 controller.go:333] event from workqueue successfully processed
+[student@workstation DO180-apps]$ oc adm node-logs --tail 1 -u kubelet master01
+-- Logs begin at Tue 2021-07-13 12:11:52 UTC, end at Thu 2022-05-26 09:00:46 UTC. --
+May 23 11:21:06.474731 master01 systemd[1]: kubelet.service: Consumed 2min 13.493s CPU time
+-- Logs begin at Tue 2021-07-13 12:11:52 UTC, end at Thu 2022-05-26 09:00:46 UTC. --
+May 26 09:00:46.768797 master01 hyperkube[1725]: I0526 09:00:46.768738    1725 prober.go:126] Liveness probe for "kube-apiserver-master01_openshift-kube-apiserver(bb8588e1-62f6-4100-b217-186e060f263f):kube-apiserver" succeeded
+[student@workstation DO180-apps]$ oc debug node/master01
+Starting pod/master01-debug ...
+To use host binaries, run `chroot /host`
+Pod IP: 192.168.50.10
+If you don't see a command prompt, try pressing enter.
+sh-4.4# chroot /host
+sh-4.4# systemctl status kubelet
+● kubelet.service - Kubernetes Kubelet
+   Loaded: loaded (/etc/systemd/system/kubelet.service; enabled; vendor preset: enabled)
+  Drop-In: /etc/systemd/system/kubelet.service.d
+           └─10-mco-default-env.conf, 20-nodenet.conf
+   Active: active (running) since Mon 2022-05-23 11:22:02 UTC; 2 days ago
+  Process: 1723 ExecStartPre=/bin/rm -f /var/lib/kubelet/cpu_manager_state (code=exited, status=0/SUCCESS)
+  Process: 1721 ExecStartPre=/bin/mkdir --parents /etc/kubernetes/manifests (code=exited, status=0/SUCCESS)
+ Main PID: 1725 (kubelet)
+    Tasks: 33 (limit: 102075)
+   Memory: 361.2M
+      CPU: 6h 20min 48.878s
+   CGroup: /system.slice/kubelet.service
+           └─1725 kubelet --config=/etc/kubernetes/kubelet.conf --bootstrap-kubeconfig=/etc/kubernetes/kubeconfig --kubeconfig=/var/lib/kubelet/kubeconfig --container-runtime=r>
+
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.690478    1725 status_manager.go:429] Ignoring same status for pod "psql-578f78ccb-c8njn_install-troubleshoot(f4e99fdb->
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.690713    1725 volume_manager.go:372] Waiting for volumes to attach and mount for pod "psql-578f78ccb-c8njn_install-tro>
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.690789    1725 volume_manager.go:403] All volumes are attached and mounted for pod "psql-578f78ccb-c8njn_install-troubl>
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.690875    1725 kuberuntime_manager.go:593] Container {Name:postgresql Image:registry.redhat.io/rhel8/postgresq-13:1 Com>
+ropagation:<nil> SubPathExpr:} {Name:default-token-r6v2z ReadOnly:true MountPath:/var/run/secrets/kubernetes.io/serviceaccount SubPath: MountPropagation:<nil> SubPathExpr:}] Vo>
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.690888    1725 kuberuntime_manager.go:664] computePodActions got {KillPod:false CreateSandbox:false SandboxID:0bb18855b>
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.691934    1725 event.go:291] "Event occurred" object="install-troubleshoot/psql-578f78ccb-c8njn" kind="Pod" apiVersion=>
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.775249    1725 secret.go:183] Setting up volume default-token-r6v2z for pod f4e99fdb-931b-489f-b106-0fa77bcd2c60 at /va>
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.775346    1725 secret.go:207] Received secret install-troubleshoot/default-token-r6v2z containing (4) pieces of data, 2>
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.817086    1725 prober.go:126] Readiness probe for "certified-operators-2kzlp_openshift-marketplace(08564336-fd88-4dae-a>
+May 26 09:05:00 master01 hyperkube[1725]: I0526 09:05:00.830251    1725 worker.go:194] Probe target container not found: psql-578f78ccb-c8njn_install-troubleshoot(f4e99fdb-931b>
+sh-4.4# 
+sh-4.4# systemctl status cri-o
+Warning: The unit file, source configuration file or drop-ins of crio.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+● crio.service - Open Container Initiative Daemon
+   Loaded: loaded (/usr/lib/systemd/system/crio.service; disabled; vendor preset: disabled)
+  Drop-In: /etc/systemd/system/crio.service.d
+           └─10-mco-default-env.conf, 20-nodenet.conf
+   Active: active (running) since Mon 2022-05-23 11:21:54 UTC; 2 days ago
+     Docs: https://github.com/cri-o/cri-o
+ Main PID: 1682 (crio)
+    Tasks: 30
+   Memory: 3.1G
+      CPU: 2h 12min 36.213s
+   CGroup: /system.slice/crio.service
+           └─1682 /usr/bin/crio --enable-metrics=true --metrics-port=9537
+
+May 26 09:04:19 master01 crio[1682]: time="2022-05-26 09:04:19.691918147Z" level=info msg="Image registry.redhat.io/rhel8/postgresq-13:1 not found" id=e581acdd-8d94-4315-bbc0-1>
+May 26 09:04:31 master01 crio[1682]: time="2022-05-26 09:04:31.692393771Z" level=info msg="Checking image status: registry.redhat.io/rhel8/postgresq-13:1" id=591ea153-2e00-48c1>
+May 26 09:04:31 master01 crio[1682]: time="2022-05-26 09:04:31.692661723Z" level=info msg="Image registry.redhat.io/rhel8/postgresq-13:1 not found" id=591ea153-2e00-48c1-a9c8-2>
+May 26 09:04:45 master01 crio[1682]: time="2022-05-26 09:04:45.692254279Z" level=info msg="Checking image status: registry.redhat.io/rhel8/postgresq-13:1" id=cc2949d4-0098-4c36>
+May 26 09:04:45 master01 crio[1682]: time="2022-05-26 09:04:45.692818989Z" level=info msg="Image registry.redhat.io/rhel8/postgresq-13:1 not found" id=cc2949d4-0098-4c36-8538-8>
+May 26 09:05:00 master01 crio[1682]: time="2022-05-26 09:05:00.691275071Z" level=info msg="Checking image status: registry.redhat.io/rhel8/postgresq-13:1" id=a8d6773a-43fc-4ada>
+May 26 09:05:00 master01 crio[1682]: time="2022-05-26 09:05:00.691547408Z" level=info msg="Image registry.redhat.io/rhel8/postgresq-13:1 not found" id=a8d6773a-43fc-4ada-aa0c-9>
+May 26 09:05:00 master01 crio[1682]: time="2022-05-26 09:05:00.692421049Z" level=info msg="Pulling image: registry.redhat.io/rhel8/postgresq-13:1" id=9512c328-d1ee-419b-b982-83>
+May 26 09:05:12 master01 crio[1682]: time="2022-05-26 09:05:12.693485421Z" level=info msg="Checking image status: registry.redhat.io/rhel8/postgresq-13:1" id=ed94493a-a553-4029>
+May 26 09:05:12 master01 crio[1682]: time="2022-05-26 09:05:12.693866140Z" level=info msg="Image registry.redhat.io/rhel8/postgresq-13:1 not found" id=ed94493a-a553-4029-a641-9>
+
+sh-4.4# crictl 
+bin/     dev/     home/    lib64/   mnt/     ostree/  root/    sbin/    sys/     tmp/     var/     
+boot/    etc/     lib/     media/   opt/     proc/    run/     srv/     sysroot/ usr/     
+sh-4.4# crictl ps --name openvswitch
+CONTAINER           IMAGE                                                              CREATED             STATE               NAME                ATTEMPT             POD ID
+32721da715abf       9bb05b231acb6f19a695fa36900bd0148e7f6bdbaf253c7bbd5c20f1c971cae2   2 days ago          Running             openvswitch         0                   bf1fb9c4f0d25
+sh-4.4# exit
+exit
+sh-4.4# exit
+exit
+
+Removing debug pod ...
+[student@workstation DO180-apps]$ oc project install-troubleshoot
+Now using project "install-troubleshoot" on server "https://api.ocp4.example.com:6443".
+[student@workstation DO180-apps]$ oc get pod
+NAME                   READY   STATUS             RESTARTS   AGE
+psql-578f78ccb-c8njn   0/1     ImagePullBackOff   0          13m
+[student@workstation DO180-apps]$ oc status
+In project install-troubleshoot on server https://api.ocp4.example.com:6443
+
+svc/psql - 172.30.15.20:5432
+
+deployment/psql deploys registry.redhat.io/rhel8/postgresq-13:1
+  deployment #1 running for 13 minutes - 0/1 pods
+
+View details with 'oc describe <resource>/<name>' or list resources with 'oc get all'.
+[student@workstation DO180-apps]$ oc get events
+LAST SEEN   TYPE      REASON              OBJECT                      MESSAGE
+13m         Normal    Scheduled           pod/psql-578f78ccb-c8njn    Successfully assigned install-troubleshoot/psql-578f78ccb-c8njn to master01
+13m         Normal    AddedInterface      pod/psql-578f78ccb-c8njn    Add eth0 [10.8.1.96/23]
+11m         Normal    Pulling             pod/psql-578f78ccb-c8njn    Pulling image "registry.redhat.io/rhel8/postgresq-13:1"
+11m         Warning   Failed              pod/psql-578f78ccb-c8njn    Failed to pull image "registry.redhat.io/rhel8/postgresq-13:1": rpc error: code = Unknown desc = Error reading manifest 1 in registry.redhat.io/rhel8/postgresq-13: unknown: Not Found
+11m         Warning   Failed              pod/psql-578f78ccb-c8njn    Error: ErrImagePull
+3m18s       Normal    BackOff             pod/psql-578f78ccb-c8njn    Back-off pulling image "registry.redhat.io/rhel8/postgresq-13:1"
+8m16s       Warning   Failed              pod/psql-578f78ccb-c8njn    Error: ImagePullBackOff
+13m         Normal    SuccessfulCreate    replicaset/psql-578f78ccb   Created pod: psql-578f78ccb-c8njn
+13m         Normal    ScalingReplicaSet   deployment/psql             Scaled up replica set psql-578f78ccb to 1
+[student@workstation DO180-apps]$ lab install-troubleshoot finish
+
+Completing Guided Exercise: Troubleshooting OpenShift Clusters and Applications
+
+ · Delete OpenShift project 'install-troubleshoot'.............  SUCCESS
+ · Wait for project 'install-troubleshoot' to be gone..........  SUCCESS
+ · Remove exercise files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation DO180-apps]$ lab install-storage start
+
+Checking prerequisites for Guided Exercise: Introducing OpenShift Dynamic Storage
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'install-storage' project is absent.....................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Introducing OpenShift Dynamic Storage
+
+ · Download exercise files.....................................  SUCCESS
+ · Persistent volume claim 'postgresql-storage' is not present.  SUCCESS
+ · Application 'postgres-persistent' is not present............  SUCCESS
+ · Application 'postgres-persistent2' is not present...........  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation DO180-apps]$ oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation DO180-apps]$ oc sc
+Error: unknown command "sc" for "oc"
+
+Did you mean this?
+	cp
+	rsh
+	scale
+	set
+	ex
+
+Run 'oc --help' for usage.
+[student@workstation DO180-apps]$ oc get sc
+NAME                    PROVISIONER               RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+nfs-storage (default)   nfs-storage-provisioner   Delete          Immediate           false                  316d
+[student@workstation DO180-apps]$ oc new-app --name postgresql-persistent --docker-image registry.redhat.io/rhel8/postgresql-13:1-7 -e POSTGRESQL_USER=redhat -e POSTGRESQL_PASSWORD=redhat123 -e POSTGRESQL_DATABASE=persistentdb
+--> Found container image cafc055 (12 months old) from registry.redhat.io for "registry.redhat.io/rhel8/postgresql-13:1-7"
+
+    PostgreSQL 13 
+    ------------- 
+    PostgreSQL is an advanced Object-Relational database management system (DBMS). The image contains the client and server programs that you'll need to create, run, maintain and access a PostgreSQL DBMS server.
+
+    Tags: database, postgresql, postgresql13, postgresql-13
+
+    * An image stream tag will be created as "postgresql-persistent:1-7" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "postgresql-persistent" created
+    deployment.apps "postgresql-persistent" created
+    service "postgresql-persistent" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/postgresql-persistent' 
+    Run 'oc status' to view your app.
+[student@workstation DO180-apps]$ oc het pods
+Error: unknown command "het" for "oc"
+
+Did you mean this?
+	get
+	set
+	ex
+
+Run 'oc --help' for usage.
+[student@workstation DO180-apps]$ oc het podsoc get pods
+Error: unknown command "het" for "oc"
+
+Did you mean this?
+	get
+	set
+	ex
+
+Run 'oc --help' for usage.
+[student@workstation DO180-apps]$ oc get pods
+NAME                                     READY   STATUS    RESTARTS   AGE
+postgresql-persistent-6c996c9947-r44tl   1/1     Running   0          18s
+[student@workstation DO180-apps]$ oc set volumes deployment/postgresql-persistent --add --name postgresql-storage --type pvc --claim-class nfs-storage --claim-mode rwo --claim-size 10Gi --mount-path /var/lib/pgsql --claim-name postgresql-storage
+deployment.apps/postgresql-persistent volume updated
+[student@workstation DO180-apps]$ oc get pvc
+NAME                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+postgresql-storage   Bound    pvc-2c8b6851-e86d-4e66-8602-8774cb532fca   10Gi       RWO            nfs-storage    13s
+[student@workstation DO180-apps]$ oc get pv -o custom-columns=NAME:.metdata.name,CLAIM:.spec.claimRef.name
+NAME     CLAIM
+<none>   registry-claim
+<none>   nexus-pvc
+<none>   postgresql-storage
+[student@workstation DO180-apps]$ cd ~/DO280/labs/install-storage/
+[student@workstation install-storage]$ ./init_data.sh 
+Populating characters table
+CREATE TABLE
+INSERT 0 5
+[student@workstation install-storage]$ ./check_data.sh 
+Checking characters table
+ id |          name           |           nationality            
+----+-------------------------+----------------------------------
+  1 | Wolfgang Amadeus Mozart | Prince-Archbishopric of Salzburg
+  2 | Ludwig van Beethoven    | Bonn, Germany
+  3 | Johann Sebastian Bach   | Eisenach, Germany
+  4 | José Pablo Moncayo     | Guadalajara, México
+  5 | Niccolò Paganini       | Genoa, Italy
+(5 rows)
+
+[student@workstation install-storage]$ oc delete all -l app=postgresql-persistent
+service "postgresql-persistent" deleted
+deployment.apps "postgresql-persistent" deleted
+imagestream.image.openshift.io "postgresql-persistent" deleted
+[student@workstation install-storage]$ oc new-app --name postgresql-persistent2 --docker-image registry.redhat.io/rhel8/postgresql-13:1-7 -e POSTGRESQL_USER=redhat -e POSTGRESQL_PASSWORD=redhat123 -e POSTGRESQL_DATABASE=persistentdb
+--> Found container image cafc055 (12 months old) from registry.redhat.io for "registry.redhat.io/rhel8/postgresql-13:1-7"
+
+    PostgreSQL 13 
+    ------------- 
+    PostgreSQL is an advanced Object-Relational database management system (DBMS). The image contains the client and server programs that you'll need to create, run, maintain and access a PostgreSQL DBMS server.
+
+    Tags: database, postgresql, postgresql13, postgresql-13
+
+    * An image stream tag will be created as "postgresql-persistent2:1-7" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "postgresql-persistent2" created
+    deployment.apps "postgresql-persistent2" created
+    service "postgresql-persistent2" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/postgresql-persistent2' 
+    Run 'oc status' to view your app.
+[student@workstation install-storage]$ ./check_data.sh 
+Checking characters table
+ERROR: 'characters' table does not exist
+[student@workstation install-storage]$ oc set volumes deployment/postgresql-persistent2 --add --name postgresql-storage --type pvc --claim-class nfs-storage --claim-mode rwo --claim-size 10Gi --mount-path /var/lib/pgsql --claim-name postgresql-storage
+deployment.apps/postgresql-persistent2 volume updated
+error: failed to patch volume update to pod template: persistentvolumeclaims "postgresql-storage" already exists
+[student@workstation install-storage]$ oc set volumes deployment/postgresql-persistent2 --add --name postgresql-storage --type pvc --mount-path /var/lib/pgsql --claim-name postgresql-storage
+deployment.apps/postgresql-persistent2 volume updated
+[student@workstation install-storage]$ ./check_data.sh 
+Checking characters table
+ id |          name           |           nationality            
+----+-------------------------+----------------------------------
+  1 | Wolfgang Amadeus Mozart | Prince-Archbishopric of Salzburg
+  2 | Ludwig van Beethoven    | Bonn, Germany
+  3 | Johann Sebastian Bach   | Eisenach, Germany
+  4 | José Pablo Moncayo     | Guadalajara, México
+  5 | Niccolò Paganini       | Genoa, Italy
+(5 rows)
+
+[student@workstation install-storage]$ oc delete all -l app=postgresql-persistent2
+service "postgresql-persistent2" deleted
+deployment.apps "postgresql-persistent2" deleted
+imagestream.image.openshift.io "postgresql-persistent2" deleted
+[student@workstation install-storage]$ oc delete pvc/postgresql-storage
+persistentvolumeclaim "postgresql-storage" deleted
+[student@workstation install-storage]$ cd ~
+[student@workstation ~]$ lab install-storage finish
+
+Completing Guided Exercise: Introducing OpenShift Dynamic Storage
+
+ · Remove exercise files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab auth-provider start
+
+Checking prerequisites for Guided Exercise: Configuring Identity Providers
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'auth-provider' project is absent.......................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Configuring Identity Providers
+
+ Preparing the student's workstation:
+ · Download exercise files.....................................  SUCCESS
+ · Download solution files.....................................  SUCCESS
+ Restoring authentication settings to installation defaults:
+ · No need to perform any change...............................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ htpasswd -c -B -b DO180
+DO180/      DO180-apps/ 
+[student@workstation ~]$ htpasswd -c -B -b DO280/
+labs/      solutions/ 
+[student@workstation ~]$ htpasswd -c -B -b ~/DO280/labs/auth-provider/htpasswd admin redhat
+Adding password for user admin
+[student@workstation ~]$ htpasswd -c -B -b ~/DO280/labs/auth-provider/htpasswd developer developer
+Adding password for user developer
+[student@workstation ~]$ oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc create secret generic localusers --from-file htpasswd=/home/student/DO280/labs/auth-provider/htpasswd -n openshift-config
+secret/localusers created
+[student@workstation ~]$ oc adm policy add-cluster-role-to-user cluster-admin admin
+Warning: User 'admin' not found
+clusterrole.rbac.authorization.k8s.io/cluster-admin added: "admin"
+[student@workstation ~]$ oc get oauth cluster -o yaml > ~/DO280/labs/auth-provider/oauth.yaml 
+[student@workstation ~]$ vim ~/DO280/labs/auth-provider/oauth.yaml 
+[student@workstation ~]$ oc replace -f ~/DO280/labs/auth-provider/oauth.yaml 
+oauth.config.openshift.io/cluster replaced
+[student@workstation ~]$ oc login -u admin -p redhat
+Login failed (401 Unauthorized)
+Verify you have provided correct credentials.
+[student@workstation ~]$ oc login -u admin -p redhat
+Login failed (401 Unauthorized)
+Verify you have provided correct credentials.
+[student@workstation ~]$ oc get pods
+No resources found in default namespace.
+[student@workstation ~]$ oc login -u admin -p redhat
+Login failed (401 Unauthorized)
+Verify you have provided correct credentials.
+[student@workstation ~]$ oc login -u admin -p redhat
+Login failed (401 Unauthorized)
+Verify you have provided correct credentials.
+[student@workstation ~]$ oc whoami
+kube:admin
+[student@workstation ~]$ oc get oauth/cluster -o yaml
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"config.openshift.io/v1","kind":"OAuth","metadata":{"annotations":{"release.openshift.io/create-only":"true"},"creationTimestamp":"2021-07-13T12:14:15Z","generation":4,"managedFields":[{"apiVersion":"config.openshift.io/v1","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{".":{},"f:release.openshift.io/create-only":{}}},"f:spec":{}},"manager":"cluster-version-operator","operation":"Update","time":"2021-07-13T12:14:15Z"},{"apiVersion":"config.openshift.io/v1","fieldsType":"FieldsV1","fieldsV1":{"f:metadata":{"f:annotations":{"f:kubectl.kubernetes.io/last-applied-configuration":{}}}},"manager":"kubectl-client-side-apply","operation":"Update","time":"2021-07-28T12:02:24Z"}],"name":"cluster","resourceVersion":"1294925","selfLink":"/apis/config.openshift.io/v1/oauths/cluster","uid":"c1d4f788-a51a-4e01-b162-d1bb686a2e14"},"spec":{"identityProviders":[{"htpasswd":{"fileData":{"name":"localusers"}},"mappingMethod":"claim","name":"myusers","type":"HTPasswd"}]}}
+    release.openshift.io/create-only: "true"
+  creationTimestamp: "2021-07-13T12:14:15Z"
+  generation: 5
+  managedFields:
+  - apiVersion: config.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:release.openshift.io/create-only: {}
+      f:spec: {}
+    manager: cluster-version-operator
+    operation: Update
+    time: "2021-07-13T12:14:15Z"
+  - apiVersion: config.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+      f:spec:
+        f:identityProviders: {}
+    manager: kubectl-replace
+    operation: Update
+    time: "2022-05-26T11:38:23Z"
+  name: cluster
+  resourceVersion: "1343297"
+  selfLink: /apis/config.openshift.io/v1/oauths/cluster
+  uid: c1d4f788-a51a-4e01-b162-d1bb686a2e14
+spec:
+  identityProviders:
+  - htpasswd:
+      fileData:
+        name: localusers
+    mappingMethod: claim
+    name: myusers
+    type: HTPasswd
+[student@workstation ~]$ oc get secret -n openshift-config
+NAME                                  TYPE                                  DATA   AGE
+builder-dockercfg-f2fcd               kubernetes.io/dockercfg               1      316d
+builder-token-gfj78                   kubernetes.io/service-account-token   4      316d
+builder-token-vz4dm                   kubernetes.io/service-account-token   4      316d
+classroom-tls                         kubernetes.io/tls                     2      316d
+default-dockercfg-ctgjm               kubernetes.io/dockercfg               1      316d
+default-token-bkv6c                   kubernetes.io/service-account-token   4      316d
+default-token-hp4s4                   kubernetes.io/service-account-token   4      316d
+deployer-dockercfg-7b8hr              kubernetes.io/dockercfg               1      316d
+deployer-token-bnfvl                  kubernetes.io/service-account-token   4      316d
+deployer-token-nztc7                  kubernetes.io/service-account-token   4      316d
+etcd-client                           SecretTypeTLS                         2      316d
+etcd-metric-client                    SecretTypeTLS                         2      316d
+etcd-metric-signer                    SecretTypeTLS                         2      316d
+etcd-signer                           SecretTypeTLS                         2      316d
+htpasswd-secret                       Opaque                                1      316d
+initial-service-account-private-key   Opaque                                1      316d
+localusers                            Opaque                                1      7m5s
+pull-secret                           kubernetes.io/dockerconfigjson        1      316d
+[student@workstation ~]$ oc extract secret localusers --help
+Extract files out of secrets and config maps
+
+ The extract command makes it easy to download the contents of a config map or secret into a directory. Each key in the
+config map or secret is created as a separate file with the name of the key, as it is when you mount a secret or config
+map into a container.
+
+ You may extract the contents of a secret or config map to standard out by passing '-' to --to. The names of each key
+will be written to stdandard error.
+
+ You can limit which keys are extracted with the --keys=NAME flag, or set the directory to extract to with
+--to=DIRECTORY.
+
+Usage:
+  oc extract RESOURCE/NAME [--to=DIRECTORY] [--keys=KEY ...] [flags]
+
+Examples:
+  # extract the secret "test" to the current directory
+  oc extract secret/test
+  
+  # extract the config map "nginx" to the /tmp directory
+  oc extract configmap/nginx --to=/tmp
+  
+  # extract the config map "nginx" to STDOUT
+  oc extract configmap/nginx --to=-
+  
+  # extract only the key "nginx.conf" from config map "nginx" to the /tmp directory
+  oc extract configmap/nginx --to=/tmp --keys=nginx.conf
+
+Options:
+      --confirm=false: If true, overwrite files that already exist.
+  -f, --filename=[]: Filename, directory, or URL to file to identify to extract the resource.
+      --keys=[]: An optional list of keys to extract (default is all keys).
+      --to='.': Directory to extract files to.
+
+Use "oc options" for a list of global command-line options (applies to all commands).
+[student@workstation ~]$ oc extract secret localusers --to . -n openshift-config
+the argument "secret" must be RESOURCE/NAME
+the argument "localusers" must be RESOURCE/NAME
+[student@workstation ~]$ oc extract secret/localusers --to . -n openshift-config
+htpasswd
+[student@workstation ~]$ ls
+Desktop  DO180  DO180-apps  DO280  Documents  Downloads  github_token.txt  htpasswd  local  Music  Pictures  Public  Templates  venv  Videos
+[student@workstation ~]$ cat htpasswd
+developer:$2y$05$LYzkuhz9uBSxHwVbNb39JuWhgvOU2ZuQ3N3312Nr4KwMR8xG.Etcm
+[student@workstation ~]$ 
+[student@workstation ~]$ oc login -u developer -p developer
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ htpasswd  -B -b  admin redhat
+Usage:
+	htpasswd [-cimB25dpsDv] [-C cost] [-r rounds] passwordfile username
+	htpasswd -b[cmB25dpsDv] [-C cost] [-r rounds] passwordfile username password
+
+	htpasswd -n[imB25dps] [-C cost] [-r rounds] username
+	htpasswd -nb[mB25dps] [-C cost] [-r rounds] username password
+ -c  Create a new file.
+ -n  Don't update file; display results on stdout.
+ -b  Use the password from the command line rather than prompting for it.
+ -i  Read password from stdin without verification (for script usage).
+ -m  Force MD5 encryption of the password (default).
+ -2  Force SHA-256 crypt() hash of the password (secure).
+ -5  Force SHA-512 crypt() hash of the password (secure).
+ -B  Force bcrypt aencryption of the password (very secure).
+ -C  Set the computing time used for the bcrypt algorithm
+     (higher is more secure but slower, default: 5, valid: 4 to 31).
+ -r  Set the number of rounds used for the SHA-256, SHA-512 algorithms
+     (higher is more secure but slower, default: 5000).
+ -d  Force CRYPT encryption of the password (8 chars max, insecure).
+ -s  Force SHA-1 encryption of the password (insecure).
+ -p  Do not encrypt the password (plaintext, insecure).
+ -D  Delete the specified user.
+ -v  Verify password for the specified user.
+On other systems than Windows and NetWare the '-p' flag will probably not work.
+The SHA-1 algorithm does not use a salt and is less secure than the MD5 algorithm.
+[student@workstation ~]$ htpasswd  -B -b htpasswd  admin redhat
+Adding password for user admin
+[student@workstation ~]$ oc set --help
+Configure application resources
+
+ These commands help you make changes to existing application resources.
+
+Usage:
+  oc set COMMAND [flags]
+
+Manage workloads:
+  deployment-hook Update a deployment hook on a deployment config
+  env             Update environment variables on a pod template
+  image           Update image of a pod template
+  probe           Update a probe on a pod template
+  resources       Update resource requests/limits on objects with pod templates
+  selector        Set the selector on a resource
+  serviceaccount  Update ServiceAccount of a resource
+  volumes         Update volumes on a pod template
+
+Manage secrets and config:
+  data            Update the data within a config map or secret
+  build-secret    Update a build secret on a build config
+
+Manage application flows:
+  build-hook      Update a build hook on a build config
+  image-lookup    Change how images are resolved when deploying applications
+  triggers        Update the triggers on one or more objects
+
+Manage load balancing:
+  route-backends  Update the backends for a route
+
+Manage authorization policy:
+  subject         Update User, Group or ServiceAccount in a RoleBinding/ClusterRoleBinding
+
+Use "oc set <command> --help" for more information about a given command.
+Use "oc options" for a list of global command-line options (applies to all commands).
+[student@workstation ~]$ oc set data --help
+Add, update, or remove data keys from secrets and config maps
+
+ Secrets and config maps allow users to store keys and values that can be passed into pods or loaded by other Kubernetes
+resources. This command lets you set or remove keys from those objects from arguments or files. Use the --from-file flag
+when you want to load the contents of a file or directory, or pass command line arguments that contain either a
+KEY=VALUE pair (to set a value) or KEY- (to remove that key).
+
+ You may also use this command as part of a chain to modify an object before submitting to the server with the --local
+and --dry-run flags. This allows you to update local resources to contain additional keys.
+
+ Experimental: This command is under active development and may change without notice.
+
+Usage:
+  oc set data RESOURCE/NAME [KEY=VALUE|KEY- ...] [--from-file=file|dir|key=path] [flags]
+
+Examples:
+  # Set the 'password' key of a secret
+  oc set data secret/foo password=this_is_secret
+  
+  # Remove the 'password' key from a secret
+  oc set data secret/foo password-
+  
+  # Update the 'haproxy.conf' key of a config map from a file on disk
+  oc set data configmap/bar --from-file=../haproxy.conf
+  
+  # Update a secret with the contents of a directory, one key per file
+  oc set data secret/foo --from-file=secret-dir
+
+Options:
+      --all=false: If true, select all resources in the namespace of the specified resource types
+      --allow-missing-template-keys=true: If true, ignore any errors in templates when a field or map key is missing in
+the template. Only applies to golang and jsonpath output formats.
+      --dry-run='none': Must be "none", "server", or "client". If client strategy, only print the object that would be
+sent, without sending it. If server strategy, submit server-side request without persisting the resource.
+  -f, --filename=[]: Filename, directory, or URL to files to use to edit the resource
+      --from-file=[]: Specify a file using its file path, in which case the file basename will be used as the keyor
+optionally with a key and file path, in which case the given key will be used.  Specifying a directory will iterate each
+named file in the directory whose basename is a valid secret key.
+      --from-literal=[]: Specify a key and literal value to set (i.e. mykey=somevalue)
+  -k, --kustomize='': Process the kustomization directory. This flag can't be used together with -f or -R.
+      --local=false: If true, set image will NOT contact api-server but run locally.
+  -o, --output='': Output format. One of:
+json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-as-json|jsonpath-file.
+  -R, --recursive=false: Process the directory used in -f, --filename recursively. Useful when you want to manage
+related manifests organized within the same directory.
+  -l, --selector='': Selector (label query) to filter on
+      --template='': Template string or path to template file to use when -o=go-template, -o=go-template-file. The
+template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+
+Use "oc options" for a list of global command-line options (applies to all commands).
+[student@workstation ~]$ oc set data secret/localusers -n openshift-config --from-file=htpasswd
+Error from server (Forbidden): secrets "localusers" is forbidden: User "developer" cannot get resource "secrets" in API group "" in the namespace "openshift-config"
+[student@workstation ~]$ oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc set data secret/localusers -n openshift-config --from-file=htpasswd
+secret/localusers data updated
+[student@workstation ~]$ oc get pod -n openshift-authentication
+NAME                               READY   STATUS              RESTARTS   AGE
+oauth-openshift-77fd9cfdc5-9rkft   1/1     Running             0          8s
+oauth-openshift-77fd9cfdc5-jwj55   0/1     ContainerCreating   0          3s
+oauth-openshift-846b97bb79-bj62j   1/1     Running             0          6m16s
+oauth-openshift-846b97bb79-s62dd   1/1     Terminating         0          6m10s
+[student@workstation ~]$ oc get pod -n openshift-authentication
+NAME                               READY   STATUS        RESTARTS   AGE
+oauth-openshift-77fd9cfdc5-9rkft   1/1     Running       0          14s
+oauth-openshift-77fd9cfdc5-jwj55   0/1     Running       0          9s
+oauth-openshift-846b97bb79-bj62j   1/1     Running       0          6m22s
+oauth-openshift-846b97bb79-s62dd   1/1     Terminating   0          6m16s
+(reverse-i-search)`l': oc set data secret/^Ccalusers -n openshift-config --from-file=htpasswd
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc get nodes
+NAME       STATUS   ROLES           AGE    VERSION
+master01   Ready    master,worker   316d   v1.19.0+b00ba52
+master02   Ready    master,worker   316d   v1.19.0+b00ba52
+master03   Ready    master,worker   316d   v1.19.0+b00ba52
+[student@workstation ~]$ oc get users
+NAME        UID                                    FULL NAME   IDENTITIES
+admin       8da9e07c-da27-4d45-a9f7-870292009cc9               myusers:admin
+developer   96b5998d-93d1-4734-b5d3-13778fc1953b               myusers:developer
+[student@workstation ~]$ oc get identity
+NAME                IDP NAME   IDP USER NAME   USER NAME   USER UID
+myusers:admin       myusers    admin           admin       8da9e07c-da27-4d45-a9f7-870292009cc9
+myusers:developer   myusers    developer       developer   96b5998d-93d1-4734-b5d3-13778fc1953b
+[student@workstation ~]$ oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc delete project auth-provider
+Error from server (NotFound): namespaces "auth-provider" not found
+[student@workstation ~]$ oc delete secret localusers -n openshift-config
+secret "localusers" deleted
+[student@workstation ~]$ oc delete user --all
+user.user.openshift.io "admin" deleted
+user.user.openshift.io "developer" deleted
+[student@workstation ~]$ oc delete identity --all
+identity.user.openshift.io "myusers:admin" deleted
+identity.user.openshift.io "myusers:developer" deleted
+[student@workstation ~]$ lab auth-provider finish
+
+Completing Guided Exercise: Configuring Identity Providers
+
+ · Remove exercise files.......................................  SUCCESS
+ · Remove solution files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab auth-rbac start 
+
+Checking prerequisites for Guided Exercise: Defining and Applying permissions using RBAC
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'auth-rbac' project is absent...........................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Defining and Applying permissions using RBAC
+
+oc  · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Update HTPasswd entry for 'leader'..........................  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+ · Update HTPasswd entry for 'qa-engineer'.....................  SUCCESS
+ · Create HTPasswd secret: 'localusers'........................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+(reverse-i-search)`i': oc log^C -u adm
+[student@workstation ~]$ oc login -u admin -p redhat https://api.ocp4.example.com:6443
+Login failed (401 Unauthorized)
+Verify you have provided correct credentials.
+[student@workstation ~]$ oc login -u admin -p redhat https://api.ocp4.example.com:6443
+Login failed (401 Unauthorized)
+Verify you have provided correct credentials.
+[student@workstation ~]$ ls
+Desktop  DO180  DO180-apps  DO280  Documents  Downloads  github_token.txt  htpasswd  local  Music  Pictures  Public  Templates  venv  Videos
+[student@workstation ~]$ rm -rf htpasswd 
+[student@workstation ~]$ lab auth-rbac finish
+
+Completing Guided Exercise: Defining and Applying permissions using RBAC
+
+ · Delete HTPasswd entry for 'qa-engineer'.....................  SUCCESS
+ · Update the 'localusers' secret data.........................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab auth-rbac start 
+
+Checking prerequisites for Guided Exercise: Defining and Applying permissions using RBAC
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'auth-rbac' project is absent...........................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Defining and Applying permissions using RBAC
+
+ · Update HTPasswd entry for 'admin'...........................  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Update HTPasswd entry for 'developer'.......................  SUCCESS
+ · Update HTPasswd entry for 'qa-engineer'.....................  SUCCESS
+ · Updating htpasswd data in secret 'localusers'...............  SUCCESS
+ · Pause for creation of first oauth pod.......................  SUCCESS
+ · Pause for creation of second oauth pod......................  SUCCESS
+ · Wait up to 1 minute for 'pod/oauth-openshift-bbc78b575-gr4z4
+   '...........................................................  SUCCESS
+ · Wait up to 1 minute for oauth pod containers to be ready....  SUCCESS
+ · Delete all previous users...................................  SUCCESS
+ · Delete all previous identities..............................  SUCCESS
+ · Pause 5 seconds before validating authentication............  SUCCESS
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+ · Validate 'qa-engineer' can log in with password 'redhat'....  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u admin -p redhat https://api.ocp4.example.com:6443
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc get clusterrolebinding -o wide | grep -E 'NAME|self-provisioners'
+NAME                                                                        ROLE                                                                                    AGE    USERS                                                            GROUPS                                         SERVICEACCOUNTS
+self-provisioners                                                           ClusterRole/self-provisioner                                                            316d                                                                    system:authenticated:oauth                     
+[student@workstation ~]$ oc describe clusterrolebindings self-provisioners 
+Name:         self-provisioners
+Labels:       <none>
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+Role:
+  Kind:  ClusterRole
+  Name:  self-provisioner
+Subjects:
+  Kind   Name                        Namespace
+  ----   ----                        ---------
+  Group  system:authenticated:oauth  
+[student@workstation ~]$ oc adm policy remove-cluster-role-from-group self-provisioner systm:authenticated:oauth
+error: unable to find target [systm:authenticated:oauth]
+[student@workstation ~]$ oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+Warning: Your changes may get lost whenever a master is restarted, unless you prevent reconciliation of this rolebinding using the following command: oc annotate clusterrolebinding.rbac self-provisioners 'rbac.authorization.kubernetes.io/autoupdate=false' --overwrite
+clusterrole.rbac.authorization.k8s.io/self-provisioner removed: "system:authenticated:oauth"
+[student@workstation ~]$ oc describe clusterrolebindings self-provisioners
+Error from server (NotFound): clusterrolebindings.rbac.authorization.k8s.io "self-provisioners" not found
+[student@workstation ~]$ oc login -u leader -p redhat
+Login successful.
+
+You don't have any projects. Contact your system administrator to request a project.
+[student@workstation ~]$ oc new-project test
+Error from server (Forbidden): You may not request a new project via this API.
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 60 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "default".
+[student@workstation ~]$ oc new-project auth-rbac
+Now using project "auth-rbac" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc policy add-role-to-user admin leader
+clusterrole.rbac.authorization.k8s.io/admin added: "leader"
+[student@workstation ~]$ oc adm groups new dev-group
+group.user.openshift.io/dev-group created
+[student@workstation ~]$ oc adm groups add-users dev-group developer
+group.user.openshift.io/dev-group added: "developer"
+[student@workstation ~]$ oc adm groups new qa-group
+group.user.openshift.io/qa-group created
+[student@workstation ~]$ oc adm groups add-users qa-group qa-engineer
+group.user.openshift.io/qa-group added: "qa-engineer"
+[student@workstation ~]$ oc get groups
+NAME        USERS
+dev-group   developer
+qa-group    qa-engineer
+[student@workstation ~]$ oc get users -n qa-engineer
+NAME          UID                                    FULL NAME   IDENTITIES
+admin         1efcdf7a-59f3-4b0a-bec7-a4f326bdcbb4               myusers:admin
+developer     495a2f4d-861b-4ea2-b0dd-caf02c599872               myusers:developer
+leader        9c9afcd6-f2dd-485d-8fa7-bbe90144a3bb               myusers:leader
+qa-engineer   fe46f9f6-fa44-4f30-ae61-ce482293771e               myusers:qa-engineer
+[student@workstation ~]$ oc login -u leader -p redhat
+Login successful.
+
+You have one project on this server: "auth-rbac"
+
+Using project "auth-rbac".
+[student@workstation ~]$ oc policy add-role-to-group edit dev-group
+clusterrole.rbac.authorization.k8s.io/edit added: "dev-group"
+[student@workstation ~]$ oc policy add-role-to-group view qa-grou[
+clusterrole.rbac.authorization.k8s.io/view added: "qa-grou["
+[student@workstation ~]$ oc policy add-role-to-group view qa-group
+clusterrole.rbac.authorization.k8s.io/view added: "qa-group"
+[student@workstation ~]$ oc get rolebindings -o wide
+NAME                    ROLE                               AGE     USERS    GROUPS                             SERVICEACCOUNTS
+admin                   ClusterRole/admin                  3m54s   admin                                       
+admin-0                 ClusterRole/admin                  3m26s   leader                                      
+edit                    ClusterRole/edit                   41s              dev-group                          
+system:deployers        ClusterRole/system:deployer        3m53s                                               auth-rbac/deployer
+system:image-builders   ClusterRole/system:image-builder   3m53s                                               auth-rbac/builder
+system:image-pullers    ClusterRole/system:image-puller    3m53s            system:serviceaccounts:auth-rbac   
+view                    ClusterRole/view                   22s              qa-grou[                           
+view-0                  ClusterRole/view                   18s              qa-group                           
+[student@workstation ~]$ oc policy remove-role-to-group view qa-grou[
+error: unknown command "remove-role-to-group view qa-grou["
+See 'oc policy -h' for help and examples
+[student@workstation ~]$ oc policy -h
+Manage authorization policy
+
+Usage:
+  oc policy [flags]
+
+Available Commands:
+  add-role-to-group      Add a role to groups for the current project
+  add-role-to-user       Add a role to users or serviceaccounts for the current project
+  remove-group           Remove group from the current project
+  remove-role-from-group Remove a role from groups for the current project
+  remove-role-from-user  Remove a role from users for the current project
+  remove-user            Remove user from the current project
+  scc-review             Checks which ServiceAccount can create a Pod
+  scc-subject-review     Check whether a user or a ServiceAccount can create a Pod.
+  who-can                List who can perform the specified action on a resource
+
+Use "oc <command> --help" for more information about a given command.
+Use "oc options" for a list of global command-line options (applies to all commands).
+[student@workstation ~]$ oc policy remove-role-from-group view qa-grou[
+clusterrole.rbac.authorization.k8s.io/view removed: "qa-grou["
+[student@workstation ~]$ oc get rolebindings -o wide
+NAME                    ROLE                               AGE     USERS    GROUPS                             SERVICEACCOUNTS
+admin                   ClusterRole/admin                  4m48s   admin                                       
+admin-0                 ClusterRole/admin                  4m20s   leader                                      
+edit                    ClusterRole/edit                   95s              dev-group                          
+system:deployers        ClusterRole/system:deployer        4m47s                                               auth-rbac/deployer
+system:image-builders   ClusterRole/system:image-builder   4m47s                                               auth-rbac/builder
+system:image-pullers    ClusterRole/system:image-puller    4m47s            system:serviceaccounts:auth-rbac   
+view-0                  ClusterRole/view                   72s              qa-group                           
+[student@workstation ~]$ oc login -u developer -p developer
+Login successful.
+
+You have one project on this server: "auth-rbac"
+
+Using project "auth-rbac".
+[student@workstation ~]$ oc new-app --name httpd httpd:2.4
+--> Found image 47f6a8d (11 months old) in image stream "openshift/httpd" under tag "2.4" for "httpd:2.4"
+
+    Apache httpd 2.4 
+    ---------------- 
+    Apache httpd 2.4 available as container, is a powerful, efficient, and extensible web server. Apache supports a variety of features, many implemented as compiled modules which extend the core functionality. These can range from server-side programming language support to authentication schemes. Virtual hosting allows one Apache installation to serve many different Web sites.
+
+    Tags: builder, httpd, httpd24
+
+
+--> Creating resources ...
+    imagestreamtag.image.openshift.io "httpd:2.4" created
+    deployment.apps "httpd" created
+    service "httpd" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/httpd' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc policy add-role-to-user edit qa-engineer
+Error from server (Forbidden): rolebindings.rbac.authorization.k8s.io is forbidden: User "developer" cannot list resource "rolebindings" in API group "rbac.authorization.k8s.io" in the namespace "auth-rbac"
+[student@workstation ~]$ oc login -u qa-engineer -p redhat
+Login successful.
+
+You have one project on this server: "auth-rbac"
+
+Using project "auth-rbac".
+[student@workstation ~]$ oc scale deployment httpd --replicas 3
+Error from server (Forbidden): deployments.apps "httpd" is forbidden: User "qa-engineer" cannot patch resource "deployments/scale" in API group "apps" in the namespace "auth-rbac"
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 61 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "auth-rbac".
+[student@workstation ~]$ oc adm policy add-cluster-role-to-group --rolebinding-name self-provisoners self-provisioner system:authenticated:oauth
+Warning: Group 'system:authenticated:oauth' not found
+clusterrole.rbac.authorization.k8s.io/self-provisioner added: "system:authenticated:oauth"
+[student@workstation ~]$ lab auth-rbac finish
+
+Completing Guided Exercise: Defining and Applying permissions using RBAC
+
+ · Delete OpenShift project 'auth-rbac'........................  SUCCESS
+ · Wait for project 'auth-rbac' to be gone.....................  SUCCESS
+ · Remove group 'dev-group'....................................  SUCCESS
+ · Remove group 'qa-group'.....................................  SUCCESS
+ · Delete HTPasswd entry for 'qa-engineer'.....................  SUCCESS
+ · Update the 'localusers' secret data.........................  SUCCESS
+ · Remove user 'qa-engineer'...................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab authorization-secrets start
+
+Checking prerequisites for Guided Exercise: Managing Sensitive Information With Secrets
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'authorization-secrets' project is absent...............  SUCCESS
+
+Setting up the classroom for Guided Exercise: Managing Sensitive Information With Secrets
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project authorization-secrets
+Now using project "authorization-secrets" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc create secret generic
+error: exactly one NAME is required, got 0
+See 'oc create secret generic -h' for help and examples
+[student@workstation ~]$ oc create secret generic mysql --from-literal user=myuser --from-literal password=redhat123 --from-literal database=test_secrets --from-literal hostname=mysql
+secret/mysql created
+[student@workstation ~]$ oc new-app --name mysql --docker-image registry.redhat.io/rhel8/mysql-80:1
+--> Found container image 6563d39 (3 weeks old) from registry.redhat.io for "registry.redhat.io/rhel8/mysql-80:1"
+
+    MySQL 8.0 
+    --------- 
+    MySQL is a multi-user, multi-threaded SQL database server. The container image provides a containerized packaging of the MySQL mysqld daemon and client application. The mysqld server daemon accepts connections from clients and provides access to content from MySQL databases on behalf of the clients.
+
+    Tags: database, mysql, mysql80, mysql-80
+
+    * An image stream tag will be created as "mysql:1" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "mysql" created
+    deployment.apps "mysql" created
+    service "mysql" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/mysql' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc get pods -w
+NAME                     READY   STATUS    RESTARTS   AGE
+mysql-569d4b9f84-njktw   0/1     Pending   0          0s
+mysql-569d4b9f84-njktw   0/1     Pending   0          0s
+mysql-569d4b9f84-njktw   0/1     ContainerCreating   0          0s
+mysql-569d4b9f84-njktw   0/1     ContainerCreating   0          1s
+mysql-569d4b9f84-njktw   0/1     ContainerCreating   0          8s
+mysql-569d4b9f84-njktw   0/1     Error               0          22s
+mysql-569d4b9f84-njktw   0/1     Error               1          23s
+mysql-569d4b9f84-njktw   0/1     CrashLoopBackOff    1          24s
+^C[student@workstation ~]$ oc set env deployment/mysql --from secret/mysql --prefix MYSQL_
+deployment.apps/mysql updated
+[student@workstation ~]$ oc set volume deployment/mysql --add --type secret --mount-path /run/secrets/mysql --secret-name mysql
+info: Generated volume name: volume-qgplz
+deployment.apps/mysql volume updated
+[student@workstation ~]$ oc get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+mysql-5d987d5694-dg7b5   1/1     Running   0          9s
+[student@workstation ~]$ oc rsh mysql-5d987d5694-dg7b5
+sh-4.4$ mysql -u myuser -predhat123 test_secrets -e 'show databases;'
+mysql: [Warning] Using a password on the command line interface can be insecure.
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| test_secrets       |
++--------------------+
+sh-4.4$ df -h | grep mysql 
+tmpfs                                 7.9G   16K  7.9G   1% /run/secrets/mysql
+sh-4.4$ for FILE in $(ls /run/secrets/mysql)
+> do
+> echo "${FILE}: $(cat /run/secrets/mysql/${FILE})"
+> done
+database: test_secrets
+hostname: mysql
+password: redhat123
+user: myuser
+sh-4.4$ exit
+exit
+[student@workstation ~]$ oc new-app --name quotes --docker-image quay.io/redhattraining/famous-quotes:2.1
+--> Found container image 7ff1a7b (20 months old) from quay.io for "quay.io/redhattraining/famous-quotes:2.1"
+
+    Quotes 2.1 
+    ---------- 
+    Famous Quotes is a PoC application for Go and MySQL
+
+    Tags: poc, mysql, golang
+
+    * An image stream tag will be created as "quotes:2.1" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "quotes" created
+    deployment.apps "quotes" created
+    service "quotes" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/quotes' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc get pods -l deployment=quotes -w
+NAME                      READY   STATUS              RESTARTS   AGE
+quotes-64bdddd75b-vx76t   0/1     ContainerCreating   0          22s
+quotes-64bdddd75b-vx76t   0/1     Error               0          22s
+quotes-64bdddd75b-vx76t   0/1     Error               1          23s
+quotes-64bdddd75b-vx76t   0/1     CrashLoopBackOff    1          25s
+quotes-64bdddd75b-vx76t   0/1     Error               2          39s
+^C[student@workstation ~]$ oc set env deployment/quotes --from secret/mysql --prefix QUOTES_
+deployment.apps/quotes updated
+[student@workstation ~]$ oc get pods -l deployment=quotes -w
+NAME                      READY   STATUS        RESTARTS   AGE
+quotes-64bdddd75b-vx76t   0/1     Terminating   3          80s
+quotes-6d996745b9-6vdbw   1/1     Running       0          5s
+quotes-64bdddd75b-vx76t   0/1     Terminating   3          83s
+quotes-64bdddd75b-vx76t   0/1     Terminating   3          83s
+^C[student@workstation ~]$ oc delete project authorization-secrets 
+project.project.openshift.io "authorization-secrets" deleted
+[student@workstation ~]$ lab authorization-secrets finish
+
+Completing Guided Exercise: Managing Sensitive Information With Secrets
+
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab authorization-scc start
+
+Checking prerequisites for Guided Exercise: Controlling Application Permissions with Security Context Constraints
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'authorization-scc' project is absent...................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Controlling Application Permissions with Security Context Constraints
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project authorization-scc
+Now using project "authorization-scc" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc new-app --name gitlab --docker-image quay.io/redhattraining/gitlab-ce:8.4.3-ce.0
+--> Found container image a26371b (6 years old) from quay.io for "quay.io/redhattraining/gitlab-ce:8.4.3-ce.0"
+
+    * An image stream tag will be created as "gitlab:8.4.3-ce.0" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "gitlab" created
+    deployment.apps "gitlab" created
+    service "gitlab" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executing one or more of the commands below:
+     'oc expose service/gitlab' 
+    Run 'oc status' to view your app.
+[student@workstation ~]$ oc get pods
+NAME                     READY   STATUS              RESTARTS   AGE
+gitlab-6c69b7776-ht8r7   0/1     ContainerCreating   0          9s
+[student@workstation ~]$ oc get pods
+NAME                     READY   STATUS   RESTARTS   AGE
+gitlab-6c69b7776-ht8r7   0/1     Error    1          53s
+[student@workstation ~]$ oc logs gitlab-6c69b7776-ht8r7
+Thank you for using GitLab Docker Image!
+Current version: gitlab-ce=8.4.3-ce.0
+
+Configure GitLab for your system by editing /etc/gitlab/gitlab.rb file
+And restart this container to reload settings.
+To do it use docker exec:
+
+  docker exec -it gitlab vim /etc/gitlab/gitlab.rb
+  docker restart gitlab
+
+For a comprehensive list of configuration options please see the Omnibus GitLab readme
+https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md
+
+If this container fails to start due to permission problems try to fix it by executing:
+
+  docker exec -it gitlab update-permissions
+  docker restart gitlab
+
+Preparing services...
+Starting services...
+Configuring GitLab...
+/opt/gitlab/embedded/bin/runsvdir-start: line 34: ulimit: max user processes: cannot modify limit: Operation not permitted
+/opt/gitlab/embedded/bin/runsvdir-start: line 37: /proc/sys/fs/file-max: Read-only file system
+[2022-05-26T13:48:22+00:00] WARN: Ohai::Config[:disabled_plugins] is set. Ohai::Config[:disabled_plugins] is deprecated and will be removed in future releases of ohai. Use ohai.disabled_plugins in your configuration file to configure :disabled_plugins for ohai.
+[student@workstation ~]$ oc login -u admin -p redhat
+Login successful.
+
+You have access to 61 projects, the list has been suppressed. You can list all projects with ' projects'
+
+Using project "authorization-scc".
+[student@workstation ~]$ oc get pod/gitlab-6c69b7776-ht8r7 -o yaml | oc adm policy scc-subject-review -f -
+RESOURCE                     ALLOWED BY   
+Pod/gitlab-6c69b7776-ht8r7   anyuid       
+[student@workstation ~]$ oc create sa gitlab-sa
+serviceaccount/gitlab-sa created
+[student@workstation ~]$ oc adm policy add-scc-to-user anyuid -z gitlab-sa
+clusterrole.rbac.authorization.k8s.io/system:openshift:scc:anyuid added: "gitlab-sa"
+[student@workstation ~]$ oc login -u developer -p developer
+Login successful.
+
+You have one project on this server: "authorization-scc"
+
+Using project "authorization-scc".
+[student@workstation ~]$ oc set serviceaccount deployment/gitlab gitlab-sa
+deployment.apps/gitlab serviceaccount updated
+[student@workstation ~]$ oc get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+gitlab-6584c657cd-66v9s   1/1     Running   0          8s
+[student@workstation ~]$ lab authorization-scc finish
+
+Completing Guided Exercise: Controlling Application Permissions with Security Context Constraints
+
+ · Delete OpenShift project 'authorization-scc'................  SUCCESS
+ · Wait for project 'authorization-scc' to be gone.............  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab network-sdn start
+
+Checking prerequisites for Guided Exercise: Troubleshooting OpenShift Software-Defined Networking
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'network-sdn' project is absent.........................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Troubleshooting OpenShift Software-Defined Networking
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+ Preparing the student's workstation:
+ · Download exercise files.....................................  SUCCESS
+ · Download solution files.....................................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ 
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project network-sdn
+Now using project "network-sdn" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ cd ~/DO280/labs/network-sdn/
+[student@workstation network-sdn]$ ls
+db-data.sql  todo-db.yaml  todo-frontend.yaml
+[student@workstation network-sdn]$ oc create -f todo-db.yaml 
+deployment.apps/mysql created
+service/mysql created
+[student@workstation network-sdn]$ oc status
+In project network-sdn on server https://api.ocp4.example.com:6443
+
+svc/mysql - 172.30.138.181:3306
+  deployment/mysql deploys registry.redhat.io/rhel8/mysql-80:1
+    deployment #1 running for 9 seconds - 1 pod
+
+
+1 info identified, use 'oc status --suggest' to see details.
+[student@workstation network-sdn]$ oc get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+mysql-5f9bdc6875-2xdp5   1/1     Running   0          24s
+[student@workstation network-sdn]$ oc cp db-data.sql mysql-5f9bdc6875-2xdp5:/tmp/
+[student@workstation network-sdn]$ oc rsh mysql-5f9bdc6875-2xdp5 bash
+bash-4.4$ mysql -u root items </tmp/db-data.sql 
+bash-4.4$ mysql -uroot items -e "show tables;"
++-----------------+
+| Tables_in_items |
++-----------------+
+| Item            |
++-----------------+
+bash-4.4$ exit
+exit
+[student@workstation network-sdn]$ oc create -f todo-frontend.yaml 
+deployment.apps/frontend created
+service/frontend created
+[student@workstation network-sdn]$ oc get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+frontend-5cbdf5bf85-crf4f   0/1     ContainerCreating   0          7s
+mysql-5f9bdc6875-2xdp5      1/1     Running             0          2m23s
+[student@workstation network-sdn]$ oc get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+frontend-5cbdf5bf85-crf4f   0/1     ContainerCreating   0          11s
+mysql-5f9bdc6875-2xdp5      1/1     Running             0          2m27s
+[student@workstation network-sdn]$ oc get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+frontend-5cbdf5bf85-crf4f   1/1     Running   0          20s
+mysql-5f9bdc6875-2xdp5      1/1     Running   0          2m36s
+[student@workstation network-sdn]$ oc expose service frontend --hostname todo.apps.ocp4.example.com
+route.route.openshift.io/frontend exposed
+[student@workstation network-sdn]$ oc get routes
+NAME       HOST/PORT                    PATH   SERVICES   PORT   TERMINATION   WILDCARD
+frontend   todo.apps.ocp4.example.com          frontend   8080                 None
+[student@workstation network-sdn]$ oc logs frontend-5cbdf5bf85-crf4f
+App is ready at : 8080
+[student@workstation network-sdn]$ oc get service/mysql -o jsonpath="{.spec.cluserIP}{'\n'}
+> ^C
+[student@workstation network-sdn]$ oc get service/mysql -o jsonpath="{.spec.cluserIP}{'\n'}"
+
+[student@workstation network-sdn]$ oc get service/mysql -o jsonpath="{.spec.clusterIP}{'\n'}"
+172.30.138.181
+[student@workstation network-sdn]$ oc debug -t deployment/frontend
+Starting pod/frontend-debug ...
+Pod IP: 10.10.1.56
+If you don't see a command prompt, try pressing enter.
+sh-4.2$ curl -v telnet://172.30.138.181:3306
+* About to connect() to 172.30.138.181 port 3306 (#0)
+*   Trying 172.30.138.181...
+* Connected to 172.30.138.181 (172.30.138.181) port 3306 (#0)
+J
+8.0.26
+* RCVD IAC 2
+* RCVD IAC 207
+^C
+sh-4.2$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-sdn]$ oc get service/frontend -o jsonpath = "{.spec.clusterIP}{'\n'}"
+error: there is no need to specify a resource type as a separate argument when passing arguments in resource/name form (e.g. 'oc get resource/<resource_name>' instead of 'oc get resource resource/<resource_name>'
+[student@workstation network-sdn]$ oc get service/frontend -o jsonpath="{.spec.clusterIP}{'\n'}"
+172.30.102.82
+[student@workstation network-sdn]$ oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/mysql-debug ...
+Pod IP: 10.10.1.58
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -m 10 -v http://172.30.23.147:8080
+* Rebuilt URL to: http://172.30.23.147:8080/
+*   Trying 172.30.23.147...
+* TCP_NODELAY set
+* connect to 172.30.23.147 port 8080 failed: No route to host
+* Failed to connect to 172.30.23.147 port 8080: No route to host
+* Closing connection 0
+curl: (7) Failed to connect to 172.30.23.147 port 8080: No route to host
+sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-sdn]$ oc get pods -o wide -l name=frontend
+NAME                        READY   STATUS    RESTARTS   AGE     IP          NODE       NOMINATED NODE   READINESS GATES
+frontend-5cbdf5bf85-crf4f   1/1     Running   0          9m38s   10.8.0.94   master01   <none>           <none>
+[student@workstation network-sdn]$ oc debug -t deployment/mysql --image registry.access.redat.com/ubi8/ubi:8.4
+Starting pod/mysql-debug ...
+warning: Container mysql is unable to start due to an error: Back-off pulling image "registry.access.redat.com/ubi8/ubi:8.4"
+
+^C
+Removing debug pod ...
+warning: Container mysql is unable to start due to an error: Back-off pulling image "registry.access.redat.com/ubi8/ubi:8.4"
+[student@workstation network-sdn]$ oc debug -t deployment/mysql --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/mysql-debug ...
+Pod IP: 10.10.1.61
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -v http://10.8.0.94:8080/todo/
+*   Trying 10.8.0.94...
+* TCP_NODELAY set
+* Connected to 10.8.0.94 (10.8.0.94) port 8080 (#0)
+> GET /todo/ HTTP/1.1
+> Host: 10.8.0.94:8080
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Server: restify
+< Cache-Control: public, max-age=3600
+< Content-Length: 4508
+< Content-Type: text/html
+< Last-Modified: Thu, 05 Dec 2019 22:50:51 GMT
+< Connection: Keep-Alive
+< Date: Sat, 28 May 2022 06:53:07 GMT
+< Request-Id: f4e07f9d-c89b-4656-837c-72d066cb2a3a
+< Response-Time: 9
+< 
+<!DOCTYPE html>
+
+<html ng-app="items">
+<head>
+    <title>To Do List</title>
+
+    <link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css" />
+
+    <!-- build:css css/application.css -->
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <!-- endbuild -->
+
+    <script src="lib/dependencies/jquery.min.js"></script>
+    <script src="lib/dependencies/angular.min.js"></script>
+    <script src="lib/dependencies/angular-resource.min.js"></script>
+    <script src="lib/dependencies/ng-grid-2.0.11.min.js"></script>
+    <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- build:js script/all.js -->
+    <script src="script/item.js"></script>
+    <!-- endbuild -->
+</head>
+
+<body>
+
+<h1>To Do List Application</h1>
+
+<br/>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the feedback messages.-->
+<div class="message" ng-controller="alertMessagesController">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
+
+<br>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the grid.-->
+<div class="grid" ng-controller="itemsListController">
+    <div>
+        <h3>To Do List</h3>
+    </div>
+
+    <!-- Binds the grid component to be displayed. -->
+    <div class="gridStyle" ng-grid="gridOptions"></div>
+
+    <!--  Bind the pagination component to be displayed. -->
+    <pagination direction-links="true" boundary-links="true"
+                total-items="items.totalResults" items-per-page="items.pageSize"
+                ng-model="items.currentPage" ng-change="refreshGrid()">
+    </pagination>
+</div>
+
+<!-- Specify a Angular controller script that binds Javascript variables to the form.-->
+<div class="form" ng-controller="itemsFormController">
+    <!-- Verify item, if there is no id present, that we are Adding a Item -->
+    <div ng-if="item.id == null">
+        <h3>Add Task</h3>
+    </div>
+    <!-- Otherwise it's an Edit -->
+    <div ng-if="item.id != null">
+        <h3>Edit Task</h3>
+    </div>
+
+    <div>
+        <!-- Specify the function to be called on submit and disable HTML5 validation, since we're using Angular validation-->
+        <form name="itemForm" ng-submit="updateItem()" novalidate>
+
+            <!-- Display an error if the input is invalid and is dirty (only when someone changes the value) -->
+            <div class="form-group" ng-class="{'has-error' : itemForm.description.$invalid && itemForm.description.$dirty}">
+                <label for="description">Description:</label>
+                <!-- Display a check when the field is valid and was modified -->
+                <span ng-class="{'glyphicon glyphicon-ok' : itemForm.description.$valid && itemForm.description.$dirty}"></span>
+
+                <input id="description" name="description" type="text" class="form-control" maxlength="100"
+                       ng-model="item.description"
+                       required ng-minlength="5" ng-maxlength="100"/>
+
+                <!-- Validation messages to be displayed on required, minlength and maxlength -->
+                <p class="help-block" ng-show="itemForm.description.$error.required">Add Description.</p>
+                <p class="help-block" ng-show="itemForm.description.$error.minlength">Description must be at least 5 characters long.</p>
+                <p class="help-block" ng-show="itemForm.description.$error.maxlength">Description cannot be longer than 100 characters.</p>
+            </div>
+
+            <div class="form-group" ng-class="{'has-error' : itemForm.done.$invalid && itemForm.done.$dirty}">
+                <label for="done">Completed:</label>
+                <!-- Display a check when the field is valid and was modified -->
+                <span ng-class="{'glyphicon glyphicon-ok' : itemForm.done.$valid && itemForm.done.$dirty}"></span>
+
+                <input id="done" name="done" type="checkbox" class="form-control"
+                       ng-model="item.done" />
+
+            </div>
+
+            <!-- Form buttons. The 'Save' button is only enabled when the form is valid. -->
+            <div class="buttons">
+                <button type="button" class="btn btn-primary" ng-click="clearForm()">Clear</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="itemForm.$invalid">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+* Connection #0 to host 10.8.0.94 left intact
+sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-sdn]$ oc get svc
+NAME       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+frontend   ClusterIP   172.30.102.82    <none>        8080/TCP   12m
+mysql      ClusterIP   172.30.138.181   <none>        3306/TCP   14m
+[student@workstation network-sdn]$ oc describe svc/frontend
+Name:              frontend
+Namespace:         network-sdn
+Labels:            app=todonodejs
+                   name=frontend
+Annotations:       <none>
+Selector:          name=api
+Type:              ClusterIP
+IP:                172.30.102.82
+Port:              <unset>  8080/TCP
+TargetPort:        8080/TCP
+Endpoints:         <none>
+Session Affinity:  None
+Events:            <none>
+[student@workstation network-sdn]$ oc describe deployment/frontend | grep Labels -A1
+Labels:                 app=todonodejs
+                        name=frontend
+--
+  Labels:  app=todonodejs
+           name=frontend
+[student@workstation network-sdn]$ oc edit svc/frontend
+service/frontend edited
+[student@workstation network-sdn]$ oc describe svc/frontend
+Name:              frontend
+Namespace:         network-sdn
+Labels:            app=todonodejs
+                   name=frontend
+Annotations:       <none>
+Selector:          name=frontend
+Type:              ClusterIP
+IP:                172.30.102.82
+Port:              <unset>  8080/TCP
+TargetPort:        8080/TCP
+Endpoints:         10.8.0.94:8080
+Session Affinity:  None
+Events:            <none>
+[student@workstation network-sdn]$ cd ~
+[student@workstation ~]$ oc delete project network-sdn
+project.project.openshift.io "network-sdn" deleted
+[student@workstation ~]$ lab network-sdn finish
+
+Completing Guided Exercise: Troubleshooting OpenShift Software-Defined Networking
+
+ · Remove exercise files.......................................  SUCCESS
+ · Remove solution files.......................................  SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ lab network-ingress start
+
+Checking prerequisites for Guided Exercise: Controlling Cluster Network Ingress
+
+ Verify the OpenShift cluster is running:
+ · Router pods are available...................................  SUCCESS
+ · OAuth pods are available....................................  SUCCESS
+ · API pods are available......................................  SUCCESS
+ · Control plane node 'master01' is ready......................  SUCCESS
+ · Control plane node 'master02' is ready......................  SUCCESS
+ · Control plane node 'master03' is ready......................  SUCCESS
+ Checking for conflicts with existing OpenShift projects:
+ · The 'network-ingress' project is absent.....................  SUCCESS
+
+Setting up the classroom for Guided Exercise: Controlling Cluster Network Ingress
+
+ · Validate 'admin' can log in with password 'redhat'..........  SUCCESS
+ · Validate 'leader' can log in with password 'redhat'.........  SUCCESS
+ · Validate 'developer' can log in with password 'developer'...  SUCCESS
+ Preparing Workstation:
+ · Download exercise files.....................................  SUCCESS
+ Configuring Certificates:
+ · Generating unique CA key password...........................  SUCCESS
+ · Setting environment variable in cert. configuration file....  SUCCESS
+ · Generating the CA key.......................................  SUCCESS
+ · Generating CA certificate...................................  SUCCESS
+ · Updating privileges on certs directory......................  SUCCESS
+
+Overall start status...........................................  SUCCESS
+
+[student@workstation ~]$ oc login -u developer -p developer https://api.ocp4.example.com:6443
+Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project <projectname>
+
+[student@workstation ~]$ oc new-project network-ingress
+Now using project "network-ingress" on server "https://api.ocp4.example.com:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+
+[student@workstation ~]$ oc create -f ~/DO280/labs/network-ingress/todo-app-v1.yaml 
+deployment.apps/todo-http created
+service/todo-http created
+[student@workstation ~]$ oc statuis
+Error: unknown command "statuis" for "oc"
+
+Did you mean this?
+	status
+
+Run 'oc --help' for usage.
+[student@workstation ~]$ oc status
+In project network-ingress on server https://api.ocp4.example.com:6443
+
+svc/todo-http - 172.30.159.110:80 -> 8080
+  deployment/todo-http deploys quay.io/redhattraining/todo-angular:v1.1
+    deployment #1 running for 11 seconds - 1 pod
+
+
+1 info identified, use 'oc status --suggest' to see details.
+[student@workstation ~]$ oc expose svc todo-http --hostname todo-http.appsocp4.example.com
+route.route.openshift.io/todo-http exposed
+[student@workstation ~]$ oc get routes
+NAME        HOST/PORT                        PATH   SERVICES    PORT   TERMINATION   WILDCARD
+todo-http   todo-http.appsocp4.example.com          todo-http   8080                 None
+[student@workstation ~]$ oc expose svc todo-http --hostname todo-http.apps.ocp4.example.com --name new1
+route.route.openshift.io/new1 exposed
+[student@workstation ~]$ oc get routes
+NAME        HOST/PORT                         PATH   SERVICES    PORT   TERMINATION   WILDCARD
+new1        todo-http.apps.ocp4.example.com          todo-http   8080                 None
+todo-http   todo-http.appsocp4.example.com           todo-http   8080                 None
+[student@workstation ~]$ cd ~/DO280/labs/network-ingress/
+[student@workstation network-ingress]$ oc expose svc todo-http --hostname todo-https.apps.ocp4.example.com --name new1https^C
+[student@workstation network-ingress]$ oc create route edge todo-https --service todo-http --hostname todo-https.apps.ocp4.example.com
+route.route.openshift.io/todo-https created
+[student@workstation network-ingress]$ curl -I -v https://todo-https.apps.ocp4.example.com
+* Rebuilt URL to: https://todo-https.apps.ocp4.example.com/
+*   Trying 192.168.50.254...
+* TCP_NODELAY set
+* Connected to todo-https.apps.ocp4.example.com (192.168.50.254) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.3 (OUT), TLS handshake, [no content] (0):
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: O=EXAMPLE.COM; CN=api.ocp4.example.com
+*  start date: May 10 11:18:41 2021 GMT
+*  expire date: May 10 11:18:41 2026 GMT
+*  subjectAltName: host "todo-https.apps.ocp4.example.com" matched cert's "*.apps.ocp4.example.com"
+*  issuer: O=EXAMPLE.COM; CN=Red Hat Training Certificate Authority
+*  SSL certificate verify ok.
+* TLSv1.3 (OUT), TLS app data, [no content] (0):
+> HEAD / HTTP/1.1
+> Host: todo-https.apps.ocp4.example.com
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.3 (IN), TLS handshake, [no content] (0):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.3 (IN), TLS app data, [no content] (0):
+< HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+< Server: nginx/1.14.1
+Server: nginx/1.14.1
+< Date: Sat, 28 May 2022 07:28:26 GMT
+Date: Sat, 28 May 2022 07:28:26 GMT
+< Content-Type: text/html
+Content-Type: text/html
+< Set-Cookie: 947acc174fec7aa4880f048abd1ce952=3b89f0cdc48d0ec546e1e07a6a6fe377; path=/; HttpOnly; Secure; SameSite=None
+Set-Cookie: 947acc174fec7aa4880f048abd1ce952=3b89f0cdc48d0ec546e1e07a6a6fe377; path=/; HttpOnly; Secure; SameSite=None
+< Cache-control: private
+Cache-control: private
+
+< 
+* Connection #0 to host todo-https.apps.ocp4.example.com left intact
+[student@workstation network-ingress]$ oc get svc todo-http -o jsonpath="{.spec.cluserIP}{'\n'}"
+
+[student@workstation network-ingress]$ oc get svc todo-http -o jsonpath="{.spec.clusterIP}{'\n'}"
+172.30.159.110
+[student@workstation network-ingress]$ oc debug -t deployment/todo-http --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/todo-http-debug ...
+Pod IP: 10.10.1.73
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -v 172.30.159.110
+* Rebuilt URL to: 172.30.159.110/
+*   Trying 172.30.159.110...
+* TCP_NODELAY set
+* Connected to 172.30.159.110 (172.30.159.110) port 80 (#0)
+> GET / HTTP/1.1
+> Host: 172.30.159.110
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Server: nginx/1.14.1
+< Date: Sat, 28 May 2022 07:31:16 GMT
+< Content-Type: text/html
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< 
+<!DOCTYPE html>
+<html lang="en" ng-app="todoItemsApp" ng-controller="appCtl">
+<head>
+    <meta charset="utf-8">
+    <title>ToDo app</title>
+
+    <link rel="stylesheet" href="assets/css/libs/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/libs/angular-motion/angular-motion.css">
+    <link rel="stylesheet" href="assets/css/libs/angular-xeditable/xeditable.css">
+
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <script type="text/javascript" src="assets/js/libs/jquery/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/libs/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/libs/angular/angular.min.js"></script>
+
+    <script type="text/javascript" src="assets/js/libs/angular/angular-route.min.js"></script>
+    <script type="text/javascript" src="assets/js/libs/angular/angular-animate.min.js"></script>
+
+    <script type="text/javascript" src="assets/js/libs/angular-ui-router/angular-ui-router.js"></script>
+
+    <script type="text/javascript" src="assets/js/libs/angular-strap/angular-strap.js"></script>
+    <script type="text/javascript" src="assets/js/libs/angular-strap/angular-strap.tpl.js"></script>
+    <script type="text/javascript" src="assets/js/libs/angular-xeditable/xeditable.js"></script>
+
+    <script type="text/javascript" src="assets/js/libs/angular/angular-sanitize.js"></script>
+    <script type="text/javascript" src="assets/js/app/utils/md5.js"></script>
+
+    <script type="text/javascript" src="assets/js/app/module.js"></script>
+    <script type="text/javascript" src="assets/js/app/states/states.js"></script>
+
+    <script type="text/javascript" src="assets/js/app/domain/todoitems.js"></script>
+    <script type="text/javascript" src="assets/js/app/ui/filters.js"></script>
+
+    <script type="text/javascript" src="assets/js/app/ui/focus.js"></script>
+    <script type="text/javascript" src="assets/js/app/ui/gravatar.js"></script>
+    <script type="text/javascript" src="assets/js/app/ui/editable.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-toggle">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">ToDo App</a>
+    </div>
+    <div class="collapse navbar-collapse" id="nav-toggle">
+        <ul class="nav navbar-nav">
+            <li ui-sref-active="active"><a ui-sref="list">Browse</a></li>
+            <li ui-sref-active="active"><a ui-sref="create">Create</a></li>
+        </ul>
+        <form class="navbar-form navbar-right" role="search">
+            <input type="text" class="form-control" placeholder="Search" ng-model="search.description" ng-keyup="startSearch()">
+        </form>
+    </div>
+
+</nav>
+<div class="container">
+    <div ui-view></div>
+</div>
+
+</body>
+* Connection #0 to host 172.30.159.110 left intact
+</html>sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-ingress]$ oc delete route todo-https
+route.route.openshift.io "todo-https" deleted
+[student@workstation network-ingress]$ cd certs/
+[student@workstation certs]$ ls -l
+total 20
+-rw-rw-r--. 1 student student  566 Oct  6  2021 openssl-commands.txt
+-rw-rw-r--. 1 student student   33 May 28 03:17 passphrase.txt
+-rw-------. 1 student student 1743 May 28 03:17 training-CA.key
+-rw-r--r--. 1 student student 1334 May 28 03:17 training-CA.pem
+-rw-r--r--. 1 student student  352 May 28 03:17 training.ext
+[student@workstation certs]$ openssl genrsa -out training.key 2048
+Generating RSA private key, 2048 bit long modulus (2 primes)
+......+++++
+........................................................................................................................................................................................+++++
+e is 65537 (0x010001)
+[student@workstation certs]$ openssl req -new -subj "/C=US/ST=North Carolina/L-Raliegh/O=Red Hat/\CN=todo-https.apps.ocp4.example.com" -key training.key -out training.csr
+req: Skipping unknown attribute "L-Raliegh/O"
+req: Skipping unknown attribute "\CN"
+[student@workstation certs]$ openssl req -new -subj "/C=US/ST=North Carolina/L=Raliegh/O=Red Hat/\CN=todo-https.apps.ocp4.example.com" -key training.key -out training.csr
+req: Skipping unknown attribute "\CN"
+[student@workstation certs]$ openssl req -new -subj "/C=US/ST=North Carolina/L=Raliegh/O=Red Hat/CN=todo-https.apps.ocp4.example.com" -key training.key -out training.csr
+[student@workstation certs]$ openssl x509 -req -in training.csr -passin file:passphrase.txt -CA training-CA.pem -CAkey training-CA.key -CAcreateserial -out training.crt -days 1825 -sha256 -extfile training.ext 
+Signature ok
+subject=C = US, ST = North Carolina, L = Raliegh, O = Red Hat, CN = todo-https.apps.ocp4.example.com
+Getting CA Private Key
+[student@workstation certs]$ ls -lrt
+total 36
+-rw-rw-r--. 1 student student  566 Oct  6  2021 openssl-commands.txt
+-rw-rw-r--. 1 student student   33 May 28 03:17 passphrase.txt
+-rw-r--r--. 1 student student  352 May 28 03:17 training.ext
+-rw-------. 1 student student 1743 May 28 03:17 training-CA.key
+-rw-r--r--. 1 student student 1334 May 28 03:17 training-CA.pem
+-rw-------. 1 student student 1679 May 28 03:32 training.key
+-rw-rw-r--. 1 student student 1021 May 28 03:34 training.csr
+-rw-rw-r--. 1 student student   41 May 28 03:36 training-CA.srl
+-rw-rw-r--. 1 student student 1399 May 28 03:36 training.crt
+[student@workstation certs]$ cd ..
+[student@workstation network-ingress]$ oc create secret tls todo-certs --cert certs/training.crt --key certs/training.key
+secret/todo-certs created
+[student@workstation network-ingress]$ oc create -f todo-app-v2.yaml 
+deployment.apps/todo-https created
+service/todo-https created
+[student@workstation network-ingress]$ oc get pods
+NAME                          READY   STATUS              RESTARTS   AGE
+todo-http-5b8874d978-9sb88    1/1     Running             0          19m
+todo-https-7d59b58dcf-jbfql   0/1     ContainerCreating   0          8s
+[student@workstation network-ingress]$ oc get pods
+NAME                          READY   STATUS              RESTARTS   AGE
+todo-http-5b8874d978-9sb88    1/1     Running             0          19m
+todo-https-7d59b58dcf-jbfql   0/1     ContainerCreating   0          11s
+[student@workstation network-ingress]$ oc get pods
+NAME                          READY   STATUS              RESTARTS   AGE
+todo-http-5b8874d978-9sb88    1/1     Running             0          19m
+todo-https-7d59b58dcf-jbfql   0/1     ContainerCreating   0          13s
+[student@workstation network-ingress]$ oc get pods
+NAME                          READY   STATUS    RESTARTS   AGE
+todo-http-5b8874d978-9sb88    1/1     Running   0          19m
+todo-https-7d59b58dcf-jbfql   1/1     Running   0          15s
+[student@workstation network-ingress]$ oc describe pod todo-https-7d59b58dcf-jbfql | grep Mounts -A2
+    Mounts:
+      /usr/local/etc/ssl/certs from tls-certs (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-fqvt4 (ro)
+[student@workstation network-ingress]$ oc create route passthrough todo-https --service todo-https --port 8443 --hostname todo-https.apps.ocp4.example.com
+route.route.openshift.io/todo-https created
+[student@workstation network-ingress]$ curl -vvI --cacert certs/training-CA.pem https://todo-https.apps.ocp4.example.com
+* Rebuilt URL to: https://todo-https.apps.ocp4.example.com/
+*   Trying 192.168.50.254...
+* TCP_NODELAY set
+* Connected to todo-https.apps.ocp4.example.com (192.168.50.254) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*   CAfile: certs/training-CA.pem
+  CApath: none
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.2 (IN), TLS handshake, Certificate (11):
+* TLSv1.2 (IN), TLS handshake, Server key exchange (12):
+* TLSv1.2 (IN), TLS handshake, Server finished (14):
+* TLSv1.2 (OUT), TLS handshake, Client key exchange (16):
+* TLSv1.2 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.2 (OUT), TLS handshake, Finished (20):
+* TLSv1.2 (IN), TLS handshake, Finished (20):
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: C=US; ST=North Carolina; L=Raliegh; O=Red Hat; CN=todo-https.apps.ocp4.example.com
+*  start date: May 28 07:36:12 2022 GMT
+*  expire date: May 27 07:36:12 2027 GMT
+*  subjectAltName: host "todo-https.apps.ocp4.example.com" matched cert's "*.apps.ocp4.example.com"
+*  issuer: C=US; ST=North Carolina; L=Raleigh; O=Red Hat; CN=ocp4.example.com
+*  SSL certificate verify ok.
+* Using HTTP2, server supports multi-use
+* Connection state changed (HTTP/2 confirmed)
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+* Using Stream ID: 1 (easy handle 0x5558615ac740)
+> HEAD / HTTP/2
+> Host: todo-https.apps.ocp4.example.com
+> User-Agent: curl/7.61.1
+> Accept: */*
+> 
+* Connection state changed (MAX_CONCURRENT_STREAMS == 128)!
+< HTTP/2 200 
+HTTP/2 200 
+< server: nginx/1.14.1
+server: nginx/1.14.1
+< date: Sat, 28 May 2022 07:40:51 GMT
+date: Sat, 28 May 2022 07:40:51 GMT
+< content-type: text/html
+content-type: text/html
+< content-length: 3017
+content-length: 3017
+< last-modified: Thu, 28 Nov 2019 19:53:20 GMT
+last-modified: Thu, 28 Nov 2019 19:53:20 GMT
+< etag: "5de025b0-bc9"
+etag: "5de025b0-bc9"
+< strict-transport-security: max-age=63072000; includeSubdomains
+strict-transport-security: max-age=63072000; includeSubdomains
+< x-frame-options: DENY
+x-frame-options: DENY
+< x-content-type-options: nosniff
+x-content-type-options: nosniff
+< accept-ranges: bytes
+accept-ranges: bytes
+
+< 
+* Connection #0 to host todo-https.apps.ocp4.example.com left intact
+[student@workstation network-ingress]$ oc get svc todo-https -o jsonpath="{.spec.clusterIP}{'\n'}"
+172.30.125.178
+[student@workstation network-ingress]$ oc debug -t deployment/todo-https --image registry.access.redhat.com/ubi8/ubi:8.4
+Starting pod/todo-https-debug ...
+Pod IP: 10.8.0.98
+If you don't see a command prompt, try pressing enter.
+sh-4.4$ curl -I http://172.30.125.178
+HTTP/1.1 301 Moved Permanently
+Server: nginx/1.14.1
+Date: Sat, 28 May 2022 07:43:11 GMT
+Content-Type: text/html
+Connection: keep-alive
+Location: https://172.30.125.178:8443/
+
+sh-4.4$ curl -s -k https://172.30.125.178:8443 | head -n5
+<!DOCTYPE html>
+<html lang="en" ng-app="todoItemsApp" ng-controller="appCtl">
+<head>
+    <meta charset="utf-8">
+    <title>ToDo app</title>
+sh-4.4$ exit
+exit
+
+Removing debug pod ...
+[student@workstation network-ingress]$ cd ~
+[student@workstation ~]$ oc delete project network-ingress 
+project.project.openshift.io "network-ingress" deleted
+la[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ lab network-ingress finish
+
+Completing Guided Exercise: Controlling Cluster Network Ingress
+
+ · Remove exercise files.......................................  
+
+
+SUCCESS
+
+Please use start if you wish to do the exercise again.
+
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+[student@workstation ~]$ 
+
